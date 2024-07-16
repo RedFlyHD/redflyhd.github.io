@@ -131,10 +131,7 @@ footer::before {
   width: 28%;
 }
 
-.col2, .col3 {
-  background-color: #121212;
-  border-radius: calc(0.5 * var(--m))
-}
+
 
 img {
   height: calc(0.3 * var(--m));
