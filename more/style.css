@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css?family=IBM%20Plex%20Sans:500|IBM%20Plex%20Sans:300");
 
 :root {
+  zoom: 85%;
   --m: 4rem;
 }
 
