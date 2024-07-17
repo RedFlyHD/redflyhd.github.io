@@ -52,10 +52,13 @@ h1, h2, h3 {
   transform: translate(-50%, -50%);
   user-select: none;
   max-width: 600px;
-  padding: 48px;
+  padding-left: 48px;
+  padding-top: 38px;
+  padding-right: 48px;
+  padding-bottom: 35px;
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
-  border-radius: 8px;
+  border-radius: 20px;
   box-shadow: 0 4px 90px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 }
