@@ -100,6 +100,7 @@
 <!-- Loader script -->
 <script>
   const anecdotes = [
+"💻 Mon portfolio est toujours en développement, et certaines fonctions ne sont pas encore ajoutées, c’est normal ✨🚀.",
 "📶 Le chargement peut prendre un certain moment en fonction de l’état de votre connexion ⏳🌐.",
 "🎥 Le motion design a été inventé dans les années 1960 !",
 "🖥️ Adobe After Effects a vu le jour en 1993, et il reste un incontournable aujourd'hui.",
@@ -117,15 +118,26 @@
 
   let currentAnecdote = 0;
   let anecdoteInterval;
+  let previousAnecdote = -1;
+
+  function getRandomAnecdote() {
+    let randomIndex;
+    do {
+      randomIndex = Math.floor(Math.random() * anecdotes.length);
+    } while (randomIndex === previousAnecdote); // Avoid showing same anecdote twice in a row
+    
+    previousAnecdote = randomIndex;
+    return randomIndex;
+  }
 
   function showNextAnecdote() {
     const anecdoteElement = document.querySelector('.anecdote');
     anecdoteElement.classList.remove('visible');
     
     setTimeout(() => {
+      currentAnecdote = getRandomAnecdote();
       anecdoteElement.textContent = anecdotes[currentAnecdote];
       anecdoteElement.classList.add('visible');
-      currentAnecdote = (currentAnecdote + 1) % anecdotes.length;
     }, 500);
   }
 
