@@ -7,8 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp,container-queries"></script>
     <link rel="icon" href="favicon.ico">
-    <link rel="stylesheet" href="style.css">
-    <script src="script.js"></script>
+    <link rel="stylesheet" href="work.css">
 
     <style>
         #navi { 
@@ -30,10 +29,138 @@
     </style>
 
 
-<script>
-  window.alert("⚠️ Mon portfolio est toujours en développement. Il peut donc y avoir des bugs d'affichage sur certains navigateurs, ou dans les espaces réduits. Certains boutons ne fonctionnent pas, et certaines images peuvent être manquantes.");
 
+
+
+<!-- Loader styling -->
+<style>
+  .loader-wrapper {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: #ffffff86; 
+    backdrop-filter: blur(50px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
+
+  .loader {
+    width: 50px;
+    height: 50px;
+    border: 2px solid #333;
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s ease-in-out infinite;
+    filter: drop-shadow(0 0 0.75rem rgba(255, 255, 255, 0.2));
+    margin-bottom: 20px;
+  }
+
+  .loading-text {
+    color: #000000;
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    font-family: "San Francisco";
+  }
+
+  .anecdote {
+    color: #0000007b;
+    font-size: 0.9em;
+    text-align: center;
+    max-width: 80%;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    font-family: "San Francisco";
+  }
+
+  .anecdote.visible {
+    opacity: 1;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .loader-wrapper.fade-out {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+  }
+</style>
+
+<!-- Loader HTML -->
+<div class="loader-wrapper">
+  <div class="loader"></div>
+  <div class="loading-text">Chargement en cours...</div>
+  <div class="anecdote"></div>
+</div>
+
+<!-- Loader script -->
+<script>
+  const anecdotes = [
+"💻 Mon portfolio est toujours en développement, et certaines fonctions ne sont pas encore ajoutées, c’est normal ✨🚀",
+"📶 Le chargement peut prendre un certain moment en fonction de l’état de votre connexion ⏳🌐",
+"🎥 Le motion design a été inventé dans les années 1960 !",
+"🖥️ Adobe After Effects a vu le jour en 1993, et il reste un incontournable aujourd'hui",
+"🌌 La première animation 3D remonte à 1972, un vrai bond dans l’histoire des effets visuels",
+"🌱 J'apprends tout en autodidacte, que ce soit pour coder ou créer des animations 🎓✨",
+"🎞️ J'adore utiliser After Effects pour donner vie à mes idées 💻⚡",
+"🖌️ J'utilise plusieurs logiciels comme After Effects, Adobe XD, Figma, Illustrator pour mes créations 💡🎨",
+"📲 Je partage mon travail sur YouTube, TikTok et Instagram✨🌍",
+"⚡ Je trouve ça génial d’imaginer et tester de nouvelles idées pour mes projets, ça me motive à fond 💭🚀",
+
+  ];
+
+  let currentAnecdote = 0;
+  let anecdoteInterval;
+  let previousAnecdote = -1;
+
+  function getRandomAnecdote() {
+    let randomIndex;
+    do {
+      randomIndex = Math.floor(Math.random() * anecdotes.length);
+    } while (randomIndex === previousAnecdote); // Avoid showing same anecdote twice in a row
+    
+    previousAnecdote = randomIndex;
+    return randomIndex;
+  }
+
+  function showNextAnecdote() {
+    const anecdoteElement = document.querySelector('.anecdote');
+    anecdoteElement.classList.remove('visible');
+    
+    setTimeout(() => {
+      currentAnecdote = getRandomAnecdote();
+      anecdoteElement.textContent = anecdotes[currentAnecdote];
+      anecdoteElement.classList.add('visible');
+    }, 500);
+  }
+
+  // Initial display
+  showNextAnecdote();
+  anecdoteInterval = setInterval(showNextAnecdote, 3000);
+
+  window.addEventListener('load', function() {
+    const loaderWrapper = document.querySelector('.loader-wrapper');
+    
+    // Speed up anecdotes when page is loaded
+    clearInterval(anecdoteInterval);
+    anecdoteInterval = setInterval(showNextAnecdote, 1000);
+    
+    setTimeout(() => {
+      clearInterval(anecdoteInterval);
+      loaderWrapper.classList.add('fade-out');
+      setTimeout(() => {
+        loaderWrapper.style.display = 'none';
+      }, 500);
+    }, 1000);
+  });
 </script>
+
 </head>
 
 
@@ -133,9 +260,8 @@
       </svg>
     </a>
 
-      <a href="#" class="w-full flex items-center justify-center text-black transition ease-in-out text-xs h-full mr-1 rounded-full px-2 py-1 bg-black bg-opacity-0 scale-100 hover:bg-opacity-20 hover:scale-90">Accueil</a>
+      <a href="index.html" class="w-full flex items-center justify-center text-black transition ease-in-out text-xs h-full mr-1 rounded-full px-2 py-1 bg-black bg-opacity-0 scale-100 hover:bg-opacity-20 hover:scale-90">Accueil</a>
       <a href="#" class="w-full flex items-center justify-center text-black transition ease-in-out text-xs h-full mr-1 rounded-full px-2 py-1 bg-black bg-opacity-0 scale-100 hover:bg-opacity-20 hover:scale-90">Infos</a>
-      <a href="#" class="w-full flex items-center justify-center text-black transition ease-in-out text-xs h-full mr-1 rounded-full px-2 py-1 bg-black bg-opacity-0 scale-100 hover:bg-opacity-20 hover:scale-90">Work</a>
       <a href="#" id="openModal" class="w-full flex items-center justify-center text-black transition ease-in-out text-xs h-full mr-1 rounded-full px-2 py-1 bg-black bg-opacity-0 scale-100 hover:bg-opacity-20 hover:scale-90">Contact</a>
 
   </nav>
@@ -168,7 +294,181 @@
 
 <section>
 
+<div class="py-12 px-4 md:px-8 lg:px-12 max-w-screen-xl mx-auto">
+  <h2 class="mb-4 mt-12 text-2xl font-bold text-black md:mb-6 lg:text-3xl">2025</h2>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
 
+  </div>
+
+  <h2 class="mb-4 mt-12 text-2xl font-bold text-black md:mb-6 lg:text-3xl">2024</h2>
+  <!-- Grid for Projects -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+        <!-- Project Card 1 -->
+        <div class="group relative aspect-video overflow-hidden rounded-xl shadow-lg transition-all duration-300 hover:scale-[1.02]">
+          <img src="minia/2024RedFly x Garfield.jpg" class="h-full w-full object-cover" >
+          <!-- Hover Overlay -->
+          <div class="absolute inset-0 flex items-end opacity-0 transition-all duration-300 group-hover:opacity-100">
+            <div class="w-full bg-black/50 backdrop-blur-xl p-4 translate-y-full transition-all duration-300 group-hover:translate-y-0">
+              <div class="flex items-center justify-between">
+                <h3 class="text-white font-semibold fade-in">RedFly × Garfield</h3>
+                <a href="https://youtu.be/Mz2yruk83rE?si=LXMjwMPO_C7YFbgd" class="bg-white text-black px-4 py-2 rounded-full text-sm font-medium transition hover:bg-opacity-90 hover:scale-95">
+                  Visionner
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+    <!-- Project Card 1 -->
+    <div class="group relative aspect-video overflow-hidden rounded-xl shadow-lg transition-all duration-300 hover:scale-[1.02]">
+      <img src="minia/2024RevealJune4.jpg" class="h-full w-full object-cover" >
+      <!-- Hover Overlay -->
+      <div class="absolute inset-0 flex items-end opacity-0 transition-all duration-300 group-hover:opacity-100">
+        <div class="w-full bg-black/50 backdrop-blur-xl p-4 translate-y-full transition-all duration-300 group-hover:translate-y-0">
+          <div class="flex items-center justify-between">
+            <h3 class="text-white font-semibold fade-in">Reveal ReNew - June 4</h3>
+            <a href="https://youtu.be/-dp9QM9ZIdU?si=kRxT6x2Jq8qmTsXY" class="bg-white text-black px-4 py-2 rounded-full text-sm font-medium transition hover:bg-opacity-90 hover:scale-95">
+              Visionner
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project Card 2 -->
+    <div class="group relative aspect-video overflow-hidden rounded-xl shadow-lg transition-all duration-300 hover:scale-[1.02]">
+      <img src="minia/2024TeaserJune4.jpg" class="h-full w-full object-cover" >
+      <!-- Hover Overlay -->
+      <div class="absolute inset-0 flex items-end opacity-0 transition-all duration-300 group-hover:opacity-100">
+        <div class="w-full bg-black/50 backdrop-blur-xl p-4 translate-y-full transition-all duration-300 group-hover:translate-y-0">
+          <div class="flex items-center justify-between">
+            <h3 class="text-white font-semibold fade-in">Teaser ReNew - June 4</h3>
+            <a href="https://youtu.be/uo3t5csmEaQ?si=uxKkALT2lL0BVV39" class="bg-white text-black px-4 py-2 rounded-full text-sm font-medium transition hover:bg-opacity-90 hover:scale-95">
+              Visionner
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project Card 3 -->
+    <div class="group relative aspect-video overflow-hidden rounded-xl shadow-lg transition-all duration-300 hover:scale-[1.02]">
+      <img src="minia/2024NewEraReNew.jpg" class="h-full w-full object-cover" >
+      <!-- Hover Overlay -->
+      <div class="absolute inset-0 flex items-end opacity-0 transition-all duration-300 group-hover:opacity-100">
+        <div class="w-full bg-black/50 backdrop-blur-xl p-4 translate-y-full transition-all duration-300 group-hover:translate-y-0">
+          <div class="flex items-center justify-between">
+            <h3 class="text-white font-semibold fade-in">New Era - ReNew</h3>
+            <a href="https://youtu.be/NRHOwqc_x4A?si=7foonEeE-ZA4RBSF" class="bg-white text-black px-4 py-2 rounded-full text-sm font-medium transition hover:bg-opacity-90 hover:scale-95">
+              Visionner
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="group relative aspect-video overflow-hidden rounded-xl shadow-lg transition-all duration-300 hover:scale-[1.02]">
+      <img src="minia/2024NewRedFly.jpg" class="h-full w-full object-cover" >
+      <!-- Hover Overlay -->
+      <div class="absolute inset-0 flex items-end opacity-0 transition-all duration-300 group-hover:opacity-100">
+        <div class="w-full bg-black/50 backdrop-blur-xl p-4 translate-y-full transition-all duration-300 group-hover:translate-y-0">
+          <div class="flex items-center justify-between">
+            <h3 class="text-white font-semibold fade-in">Meet new RedFly</h3>
+            <a href="https://youtu.be/O86tnd0vWUI?si=MINoPxTcwzxMImtz" class="bg-white text-black px-4 py-2 rounded-full text-sm font-medium transition hover:bg-opacity-90 hover:scale-95">
+              Visionner
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Add more project cards as needed -->
+
+  </div>
+
+  <h2 class="mb-4 mt-12 text-2xl font-bold text-black md:mb-6 lg:text-3xl">2022 - Obsolète</h2>
+  <!-- Grid for Projects -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+    <!-- Project Card 1 -->
+    <div class="group relative aspect-video overflow-hidden rounded-xl shadow-lg transition-all duration-300 hover:scale-[1.02]">
+      <img src="minia/2022test3.jpg" class="h-full w-full object-cover" >
+      <!-- Hover Overlay -->
+      <div class="absolute inset-0 flex items-end opacity-0 transition-all duration-300 group-hover:opacity-100">
+        <div class="w-full bg-black/50 backdrop-blur-xl p-4 translate-y-full transition-all duration-300 group-hover:translate-y-0">
+          <div class="flex items-center justify-between">
+            <h3 class="text-white font-semibold fade-in">Build Bêta 22u03 [ Test 3 ]</h3>
+            <a href="https://www.youtube.com/Visionner?v=7omUMMZ2lJw" class="bg-white text-black px-4 py-2 rounded-full text-sm font-medium transition hover:bg-opacity-90 hover:scale-95">
+              Visionner
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project Card 2 -->
+    <div class="group relative aspect-video overflow-hidden rounded-xl shadow-lg transition-all duration-300 hover:scale-[1.02]">
+      <img src="minia/2022test2.jpg" class="h-full w-full object-cover" >
+      <!-- Hover Overlay -->
+      <div class="absolute inset-0 flex items-end opacity-0 transition-all duration-300 group-hover:opacity-100">
+        <div class="w-full bg-black/50 backdrop-blur-xl p-4 translate-y-full transition-all duration-300 group-hover:translate-y-0">
+          <div class="flex items-center justify-between">
+            <h3 class="text-white font-semibold fade-in">Build Bêta 22u03 [ Test 2 ]</h3>
+            <a href="https://www.youtube.com/Visionner?v=9AhS5S6GKk0" class="bg-white text-black px-4 py-2 rounded-full text-sm font-medium transition hover:bg-opacity-90 hover:scale-95">
+              Visionner
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project Card 3 -->
+    <div class="group relative aspect-video overflow-hidden rounded-xl shadow-lg transition-all duration-300 hover:scale-[1.02]">
+      <img src="minia/2022test1.jpg" class="h-full w-full object-cover" >
+      <!-- Hover Overlay -->
+      <div class="absolute inset-0 flex items-end opacity-0 transition-all duration-300 group-hover:opacity-100">
+        <div class="w-full bg-black/50 backdrop-blur-xl p-4 translate-y-full transition-all duration-300 group-hover:translate-y-0">
+          <div class="flex items-center justify-between">
+            <h3 class="text-white font-semibold fade-in">Build 22u03 Trailer Test</h3>
+            <a href="https://www.youtube.com/Visionner?v=UqtYCgvxXiw" class="bg-white text-black px-4 py-2 rounded-full text-sm font-medium transition hover:bg-opacity-90 hover:scale-95">
+              Visionner
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add more project cards as needed -->
+
+  </div>
+  <h2 class="mb-4 mt-12 text-2xl font-bold text-black md:mb-6 lg:text-3xl">2021 - Obsolète</h2>
+  <!-- Grid for Projects -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+    <!-- Project Card 1 -->
+    <div class="group relative aspect-video overflow-hidden rounded-xl shadow-lg transition-all duration-300 hover:scale-[1.02]">
+      <img src="minia/2021.jpg" class="h-full w-full object-cover" >
+      <!-- Hover Overlay -->
+      <div class="absolute inset-0 flex items-end opacity-0 transition-all duration-300 group-hover:opacity-100">
+        <div class="w-full bg-black/50 backdrop-blur-xl p-4 translate-y-full transition-all duration-300 group-hover:translate-y-0">
+          <div class="flex items-center justify-between">
+            <h3 class="text-white font-semibold fade-in">Desastivale Prototype 1 - Trailer</h3>
+            <a href="https://www.youtube.com/Visionner?v=W9MdYg3KT30" class="bg-white text-black px-4 py-2 rounded-full text-sm font-medium transition hover:bg-opacity-90 hover:scale-95">
+              Visionner
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<style>
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.fade-in {
+  animation: fade-in 0.3s ease-in-out;
+}
+</style>
 
 <footer class="bg-[#0a0a0a] slide-in-fwd-bottom">
 
@@ -183,8 +483,6 @@
             </a>
           </div>
           <!-- logo - end -->
-
-          <p class="mb-6 text-gray-500 sm:pr-8">Salut, moi c'est RedFly ! Depuis quelques années, j'aime de plus en plus travailler sur de gros projets. J'adore donner vie à mes idées, même si elles sont parfois assez abstraites. J'aime sortir des règles contemporaines et innover sur mes visuels.</p>
 
           <!-- social - start -->
           <div class="flex gap-4">
@@ -219,7 +517,6 @@
 
       <a href="https://www.youtube.com/@RedFlyHD">
         <div class="border-t border-dotted border-gray-500 py-8 text-center text-sm text-gray-400">@RedFlyHD</div>
-        <div class="text-center text-sm text-gray-600 text-opacity-50">V3.6.0 beta 1</div>
       </a>
     </div>
   </div>
