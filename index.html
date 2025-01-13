@@ -107,7 +107,7 @@
 "🌌 La première animation 3D remonte à 1972, un vrai bond dans l’histoire des effets visuels",
 "🌱 J'apprends tout en autodidacte, que ce soit pour coder ou créer des animations 🎓✨",
 "🎞️ J'adore utiliser After Effects pour donner vie à mes idées 💻⚡",
-"🖌️ J'utilise plusieurs logiciels comme After Effects et Photoshop pour mes créations 💡🎨",
+"🖌️ J'utilise plusieurs logiciels comme After Effects, Adobe XD, Figma, Illustrator pour mes créations 💡🎨",
 "📲 Je partage mon travail sur YouTube, TikTok et Instagram✨🌍",
 "⚡ Je trouve ça génial d’imaginer et tester de nouvelles idées pour mes projets, ça me motive à fond 💭🚀",
 
@@ -312,7 +312,7 @@
             </div>
   
             <form class="flex w-full max-w-md gap-2 justify-center sm:justify-start"></form>
-              <button id="openModal" class="group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-lg bg-gradient-to-b from-purple-400 via-violet-500 to-indigo-600 px-6 font-medium text-neutral-200 transition ease-in-out duration-300 hover:scale-90">
+              <button id="openModal2" class="group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-lg bg-gradient-to-b from-purple-400 via-violet-500 to-indigo-600 px-6 font-medium text-neutral-200 transition ease-in-out duration-300 hover:scale-90">
               <span>Commencer</span>
               <div class="absolute inset-0 flex h-full w-full justify-center [transform:skew(-12deg)_translateX(-100%)] group-hover:duration-1000 group-hover:[transform:skew(-12deg)_translateX(100%)]">
                 <div class="relative h-full w-8 bg-white/20"></div></div></button>
@@ -350,6 +350,30 @@
               document.getElementById('contactmod').classList.add('hidden');
               });
             </script>
+
+                        <!-- Modal2 -->
+                        <div id="contactmod" class="fixed inset-0 hidden items-center justify-center bg-black bg-opacity-5 backdrop-filter backdrop-blur-sm flex z-50">
+                          <div class="bg-white p-8 rounded-[24px] shadow-lg max-w-lg w-full z-50">
+            
+                            <iframe data-tally-src="https://tally.so/embed/warMgZ?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" width="100%" height="100%" frameborder="0" marginheight="0" marginwidth="0" title="Me contacter"></iframe><script>var d=document,w="https://tally.so/widgets/embed.js",v=function(){"undefined"!=typeof Tally?Tally.loadEmbeds():d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach((function(e){e.src=e.dataset.tallySrc}))};if("undefined"!=typeof Tally)v();else if(d.querySelector('script[src="'+w+'"]')==null){var s=d.createElement("script");s.src=w,s.onload=v,s.onerror=v,d.body.appendChild(s);}</script>
+            
+            
+                            <button id="closeModa2" class="group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-lg bg-black px-6 font-medium text-neutral-200 transition ease-in-out duration-300 hover:scale-90">
+                              <span>Fermer</span>
+                              <div class="absolute inset-0 flex h-full w-full justify-center [transform:skew(-12deg)_translateX(-100%)] group-hover:duration-1000 group-hover:[transform:skew(-12deg)_translateX(100%)]">
+                                <div class="relative h-full w-8 bg-white/20"></div></div></button>
+                          </div>
+                        </div>
+            
+                        <script>
+                          document.getElementById('openModal2').addEventListener('click', function() {
+                          document.getElementById('contactmod').classList.remove('hidden');
+                          });
+            
+                          document.getElementById('closeModa2').addEventListener('click', function() {
+                          document.getElementById('contactmod').classList.add('hidden');
+                          });
+                        </script>
 
 <section>
 
