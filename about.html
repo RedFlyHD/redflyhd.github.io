@@ -8,10 +8,9 @@
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp,container-queries"></script>
     <link rel="icon" href="favicon.ico">
     <link rel="stylesheet" href="style.css">
-    <script src="script.js"></script>
 
     <style>
-        #navi {
+        #navi { 
             position: fixed; 
             top: -4%;
             width: 100%; 
@@ -30,7 +29,8 @@
     </style>
 
 
-</head>
+
+
 
 <!-- Loader styling -->
 <style>
@@ -38,7 +38,7 @@
     position: fixed;
     width: 100%;
     height: 100%;
-    background: #0a0a0abb; 
+    background: #ffffff86; 
     backdrop-filter: blur(50px);
     display: flex;
     flex-direction: column;
@@ -59,14 +59,14 @@
   }
 
   .loading-text {
-    color: #fff;
+    color: #000000;
     font-size: 1.2em;
     margin-bottom: 10px;
     font-family: "San Francisco";
   }
 
   .anecdote {
-    color: #666;
+    color: #0000007b;
     font-size: 0.9em;
     text-align: center;
     max-width: 80%;
@@ -160,11 +160,13 @@
     }, 1000);
   });
 </script>
+
 </head>
 
 
-<body class="bg-[#0a0a0a]">
-  <div class="absolute top-0 z-[-2] h-screen w-screen bg-[#0a0a0a] bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))] fade-in-bck"></div>
+
+<body class="bg-white">
+  <div class=""></div>
 
 
 
@@ -172,7 +174,7 @@
 
     <div id="navi" class="pt-6 z-50 slide-in-bck-top">
       <!-- nav - start -->
-       <nav class="sticky bg-opacity-40 bg-black backdrop-filter backdrop-blur-xl bottom-0 mx-auto flex justify-end flex-row w-full justify-between gap-4 px-2 py-2 text-xs sm:max-w-xs sm:rounded-full transition ease-in-out duration-300 hover:scale-105" >
+       <nav class="sticky bg-opacity-40 bg-white backdrop-filter backdrop-blur-xl bottom-0 mx-auto flex justify-end flex-row w-full justify-between gap-4 px-2 py-2 text-xs sm:max-w-xs sm:rounded-full transition ease-in-out duration-300 hover:scale-105">
         <a href="#" class="transition ease-in-out duration-300 hover:opacity-50 hover:scale-90">
           <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 570 570" fill="black">
         <defs>
@@ -258,287 +260,41 @@
       </svg>
     </a>
 
-
-      <a href="about" class="w-full flex items-center justify-center text-white transition ease-in-out text-xs h-full mr-1 rounded-full px-2 py-1 bg-white bg-opacity-0 scale-100 hover:bg-opacity-20 hover:scale-90">Infos</a>
-      <a href="work" class="w-full flex items-center justify-center text-white transition ease-in-out text-xs h-full mr-1 rounded-full px-2 py-1 bg-white bg-opacity-0 scale-100 hover:bg-opacity-20 hover:scale-90">Projets</a>
-      <a href="#" id="openModal" class="w-full flex items-center justify-center text-white transition ease-in-out text-xs h-full mr-1 rounded-full px-2 py-1 bg-white bg-opacity-0 scale-100 hover:bg-opacity-20 hover:scale-90">Contact</a>
+      <a href="./" class="w-full flex items-center justify-center text-black transition ease-in-out text-xs h-full mr-1 rounded-full px-2 py-1 bg-black bg-opacity-0 scale-100 hover:bg-opacity-20 hover:scale-90">Accueil</a>
+      <a href="work" class="w-full flex items-center justify-center text-black transition ease-in-out text-xs h-full mr-1 rounded-full px-2 py-1 bg-white bg-opacity-0 scale-100 hover:bg-opacity-20 hover:scale-90">Projets</a>
+      <a href="#" id="openModal" class="w-full flex items-center justify-center text-black transition ease-in-out text-xs h-full mr-1 rounded-full px-2 py-1 bg-black bg-opacity-0 scale-100 hover:bg-opacity-20 hover:scale-90">Contact</a>
 
   </nav>
 </div>
+</section>
 
-<div class="pb-6 sm:pb-8 lg:pb-12 fade-in-bck">
-    	<!--Start Background Animation Body-->
-      <div class="area">
-        <ul class="circles">
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-        </ul>
+<!-- Modal -->
+<div id="contactmod" class="fixed inset-0 hidden items-center justify-center bg-black bg-opacity-5 backdrop-filter backdrop-blur-sm flex z-50">
+  <div class="bg-white p-8 rounded-[24px] shadow-lg max-w-lg w-full z-50">
 
-      </div>
+    <iframe data-tally-src="https://tally.so/embed/warMgZ?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" width="100%" height="100%" frameborder="0" marginheight="0" marginwidth="0" title="Me contacter"></iframe><script>var d=document,w="https://tally.so/widgets/embed.js",v=function(){"undefined"!=typeof Tally?Tally.loadEmbeds():d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach((function(e){e.src=e.dataset.tallySrc}))};if("undefined"!=typeof Tally)v();else if(d.querySelector('script[src="'+w+'"]')==null){var s=d.createElement("script");s.src=w,s.onload=v,s.onerror=v,d.body.appendChild(s);}</script>
 
-      <!--End Background Animation Body-->
-  <div class="mx-auto max-w-screen-2xl px-4 md:px-8">
 
-    <section class="flex flex-col items-center">
-      <div class="flex max-w-2xl flex-col items-center mt-16 pb-16 pt-8 text-center lg:pb-48 lg:pt-32">
-        <h1 class="mb-8 text-4xl font-bold text-white sm:text-5xl md:mb-12 md:text-6xl">Repoussons les limites,<br>ensemble !</h1>
-      </div>
-    </section>
-
+    <button id="closeModal" class="group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-lg bg-black px-6 font-medium text-neutral-200 transition ease-in-out duration-300 hover:scale-90">
+      <span>Fermer</span>
+      <div class="absolute inset-0 flex h-full w-full justify-center [transform:skew(-12deg)_translateX(-100%)] group-hover:duration-1000 group-hover:[transform:skew(-12deg)_translateX(100%)]">
+        <div class="relative h-full w-8 bg-white/20"></div></div></button>
   </div>
 </div>
 
-<section>
-  <div class="py-6 sm:py-8 lg:py-12 z-0 puff-in-top slide-in-fwd-bottom">
-    <div class="mx-auto max-w-screen-xl px-4 md:px-8 z-0">
-      <div class="flex overflow-hidden rounded-[24px] bg-gray-600 bg-opacity-5 backdrop-filter backdrop-blur-xl z-0 transition ease-in-out duration-300 hover:scale-95">
-        <!-- image - start -->
-        <div class="relative hidden bg-gray-200 sm:block sm:w-1/3 lg:w-1/2 bg-gradient-to-tl from-slate-800 via-violet-500 to-white z-0">
-        </div>
-        <!-- image - end -->
-  
-        <!-- content - start -->
-        <div class="flex w-full items-center p-4 sm:w-2/3 sm:p-8 lg:w-1/2 lg:pl-10" >
-          <div class="flex w-full flex-col items-center sm:block">
-            <div class="mb-4 sm:mb-8">
-              <h2 class="text-center text-xl font-bold text-white sm:text-left sm:text-2xl lg:text-3xl">Me contacter</h2>
-              <p class="text-center text-gray-500 sm:text-left">Pour passer une commande, acheter les droits de l'une de mes créations, ou pour tout autre besoin.</p>
-            </div>
-  
-            <form class="flex w-full max-w-md gap-2 justify-center sm:justify-start"></form>
-              <button id="openModal2" class="group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-lg bg-gradient-to-b from-purple-400 via-violet-500 to-indigo-600 px-6 font-medium text-neutral-200 transition ease-in-out duration-300 hover:scale-90">
-              <span>Commencer</span>
-              <div class="absolute inset-0 flex h-full w-full justify-center [transform:skew(-12deg)_translateX(-100%)] group-hover:duration-1000 group-hover:[transform:skew(-12deg)_translateX(100%)]">
-                <div class="relative h-full w-8 bg-white/20"></div></div></button>
-            </form>
+<script>
+  document.getElementById('openModal').addEventListener('click', function() {
+  document.getElementById('contactmod').classList.remove('hidden');
+  });
 
-            <p class="mt-6 text-center text-xs text-gray-400 sm:text-left">En me contactant, vous acceptez <a href="#" class="underline decoration-indigo-500 transition duration-100 hover:text-indigo-500 active:text-indigo-600">ces conditions</a>.</p>
-          </div>
-        </div>
-        <!-- content - end -->
-      </div>
-    </div>
-  </div>
-</section>
-
-            <!-- Modal -->
-            <div id="contactmod" class="fixed inset-0 hidden items-center justify-center bg-black bg-opacity-5 backdrop-filter backdrop-blur-sm flex z-50">
-              <div class="bg-white p-8 rounded-[24px] shadow-lg max-w-lg w-full z-50">
-
-                <iframe data-tally-src="https://tally.so/embed/warMgZ?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" width="100%" height="100%" frameborder="0" marginheight="0" marginwidth="0" title="Me contacter"></iframe><script>var d=document,w="https://tally.so/widgets/embed.js",v=function(){"undefined"!=typeof Tally?Tally.loadEmbeds():d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach((function(e){e.src=e.dataset.tallySrc}))};if("undefined"!=typeof Tally)v();else if(d.querySelector('script[src="'+w+'"]')==null){var s=d.createElement("script");s.src=w,s.onload=v,s.onerror=v,d.body.appendChild(s);}</script>
+  document.getElementById('closeModal').addEventListener('click', function() {
+  document.getElementById('contactmod').classList.add('hidden');
+  });
+</script>
 
 
-                <button id="closeModal" class="group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-lg bg-black px-6 font-medium text-neutral-200 transition ease-in-out duration-300 hover:scale-90">
-                  <span>Fermer</span>
-                  <div class="absolute inset-0 flex h-full w-full justify-center [transform:skew(-12deg)_translateX(-100%)] group-hover:duration-1000 group-hover:[transform:skew(-12deg)_translateX(100%)]">
-                    <div class="relative h-full w-8 bg-white/20"></div></div></button>
-              </div>
-            </div>
-
-            <script>
-              document.getElementById('openModal').addEventListener('click', function() {
-              document.getElementById('contactmod').classList.remove('hidden');
-              });
-
-              document.getElementById('closeModal').addEventListener('click', function() {
-              document.getElementById('contactmod').classList.add('hidden');
-              });
-            </script>
-
-                        <!-- Modal2 -->
-                        <div id="contactmod" class="fixed inset-0 hidden items-center justify-center bg-black bg-opacity-5 backdrop-filter backdrop-blur-sm flex z-50">
-                          <div class="bg-white p-8 rounded-[24px] shadow-lg max-w-lg w-full z-50">
-            
-                            <iframe data-tally-src="https://tally.so/embed/warMgZ?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" width="100%" height="100%" frameborder="0" marginheight="0" marginwidth="0" title="Me contacter"></iframe><script>var d=document,w="https://tally.so/widgets/embed.js",v=function(){"undefined"!=typeof Tally?Tally.loadEmbeds():d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach((function(e){e.src=e.dataset.tallySrc}))};if("undefined"!=typeof Tally)v();else if(d.querySelector('script[src="'+w+'"]')==null){var s=d.createElement("script");s.src=w,s.onload=v,s.onerror=v,d.body.appendChild(s);}</script>
-            
-            
-                            <button id="closeModa2" class="group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-lg bg-black px-6 font-medium text-neutral-200 transition ease-in-out duration-300 hover:scale-90">
-                              <span>Fermer</span>
-                              <div class="absolute inset-0 flex h-full w-full justify-center [transform:skew(-12deg)_translateX(-100%)] group-hover:duration-1000 group-hover:[transform:skew(-12deg)_translateX(100%)]">
-                                <div class="relative h-full w-8 bg-white/20"></div></div></button>
-                          </div>
-                        </div>
-            
-                        <script>
-                          document.getElementById('openModal2').addEventListener('click', function() {
-                          document.getElementById('contactmod').classList.remove('hidden');
-                          });
-            
-                          document.getElementById('closeModa2').addEventListener('click', function() {
-                          document.getElementById('contactmod').classList.add('hidden');
-                          });
-                        </script>
-
-<section>
-
-  
-  
-  <section>
-    <div class="py-6 sm:py-8 lg:py-12 slide-in-fwd-bottom">
-      <div class="mx-auto max-w-screen-xl px-4 md:px-8">
-        <!-- text - start -->
-        <div class="mb-10 md:mb-16">
-          <h2 class="mb-4 mt-12 text-2xl font-bold text-white md:mb-6 lg:text-3xl">Mon Travail</h2>
-  
-          <p class="mb-4 max-w-screen-xl text-gray-500 md:text-lg">Salut, je m'appelle Maxence.<br> Je suis un designer digital et je partage mes créations sur YouTube sous le pseudo RedFlyHD. Je me considère comme un débutant, mais j'apprends vite parce que j'aime ça.</p>
-        </div>
-        <!-- text - end -->
-        <div class="py-12 px-4 md:px-8 lg:px-12 slide-in-fwd-bottom">
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-        
-          </div>
-        
-          <!-- Grid for Projects -->
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-                <!-- Project Card 1 -->
-                <div class="group relative aspect-video overflow-hidden rounded-xl shadow-lg transition-all duration-300 hover:scale-[1.02]">
-                  <img loading="lazy" src="minia/2024RedFly x Garfield.jpg" class="h-full w-full object-cover" >
-                  <!-- Hover Overlay -->
-                  <div class="absolute inset-0 flex items-end opacity-0 transition-all duration-300 group-hover:opacity-100">
-                    <div class="w-full bg-black/50 backdrop-blur-xl p-4 translate-y-full transition-all duration-300 group-hover:translate-y-0">
-                      <div class="flex items-center justify-between">
-                        <h3 class="text-white font-semibold fade-in">RedFly × Garfield</h3>
-                        <a href="https://youtu.be/Mz2yruk83rE?si=LXMjwMPO_C7YFbgd" class="bg-white text-black px-4 py-2 rounded-full text-sm font-medium transition hover:bg-opacity-90 hover:scale-95">
-                          Visionner
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-            <!-- Project Card 1 -->
-            <div class="group relative aspect-video overflow-hidden rounded-xl shadow-lg transition-all duration-300 hover:scale-[1.02]">
-              <img loading="lazy" src="minia/2024RevealJune4.jpg" class="h-full w-full object-cover" >
-              <!-- Hover Overlay -->
-              <div class="absolute inset-0 flex items-end opacity-0 transition-all duration-300 group-hover:opacity-100">
-                <div class="w-full bg-black/50 backdrop-blur-xl p-4 translate-y-full transition-all duration-300 group-hover:translate-y-0">
-                  <div class="flex items-center justify-between">
-                    <h3 class="text-white font-semibold fade-in">Reveal ReNew - June 4</h3>
-                    <a href="https://youtu.be/-dp9QM9ZIdU?si=kRxT6x2Jq8qmTsXY" class="bg-white text-black px-4 py-2 rounded-full text-sm font-medium transition hover:bg-opacity-90 hover:scale-95">
-                      Visionner
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-        
-        
-            <!-- Project Card 3 -->
-            <div class="group relative aspect-video overflow-hidden rounded-xl shadow-lg transition-all duration-300 hover:scale-[1.02]">
-              <img loading="lazy" src="minia/2024NewEraReNew.jpg" class="h-full w-full object-cover" >
-              <!-- Hover Overlay -->
-              <div class="absolute inset-0 flex items-end opacity-0 transition-all duration-300 group-hover:opacity-100">
-                <div class="w-full bg-black/50 backdrop-blur-xl p-4 translate-y-full transition-all duration-300 group-hover:translate-y-0">
-                  <div class="flex items-center justify-between">
-                    <h3 class="text-white font-semibold fade-in">New Era - ReNew</h3>
-                    <a href="https://youtu.be/NRHOwqc_x4A?si=7foonEeE-ZA4RBSF" class="bg-white text-black px-4 py-2 rounded-full text-sm font-medium transition hover:bg-opacity-90 hover:scale-95">
-                      Visionner
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-                      <a href="work" class="flex flex-col items-center justify-center p-8 text-center bg-white rounded-lg transition-all duration-300 hover:scale-[1.02]">
-            <p class="text-lg font-semibold text-gray-800">Voir plus</p>
-            <svg class="w-6 h-6 mt-2 text-gray-800 transform transition-transform duration-300 group-hover:translate-x-2" 
-                 xmlns="http://www.w3.org/2000/svg" 
-                 fill="none" 
-                 viewBox="0 0 24 24" 
-                 stroke="currentColor">
-              <path stroke-linecap="round" 
-                    stroke-linejoin="round" 
-                    stroke-width="2" 
-                    d="M14 5l7 7m0 0l-7 7m7-7H3" />
-            </svg>
-          </a>
-            <!-- Add more project cards as needed -->
-        
-          </div>
-        
-        
-        </div>
-  
-  
-        </div>
-      </div>
-    </div>
-  </section>
-  
-
-<section>
-  <div class="py-6 sm:py-8 lg:py-12 slide-in-fwd-bottom">
-    <div class="mx-auto max-w-screen-xl px-4 md:px-8">
-      <!-- text - start -->
-      <div class="mb-10 md:mb-16">
-        <h2 class="mb-4 mt-12 text-2xl font-bold text-white md:mb-6 lg:text-3xl">Mes projets</h2>
-
-        <p class="mb-4 max-w-screen-xl text-gray-500 md:text-lg">Je ne fais pas que du motion design, j'aime aussi me lancer dans d'autres projets, tels que ceux-ci :</p>
-      </div>
-      <!-- text - end -->
-
-      <div class="grid gap-4 sm:grid-cols-2 md:gap-6 lg:grid-cols-3 xl:grid-cols-3 xl:gap-8">
-               <!-- article - start -->
-        <div class="flex flex-col overflow-hidden rounded-lg bg-gray-600 bg-opacity-20 backdrop-filter backdrop-blur-xl z-0 transition ease-in-out duration-300 hover:scale-95">
-          <a href="https://www.youtube.com/@RedFlyHD" target="_blank" class="group relative block h-48 overflow-hidden bg-gray-600 bg-opacity-20 md:h-64">
-            <img loading="lazy" src="rss/RedFly.webp" loading="lazy" alt="loading..." class="absolute inset-0 h-full w-full object-cover object-center " />
-          </a>
-
-          <div class="flex flex-1 flex-col p-4 sm:p-6">
-            <h2 class="mb-2 text-lg font-semibold text-white">
-              <a class="transition duration-100 ">YouTube</a>
-            </h2>
-
-            <p class="text-gray-300">Réussir sur YouTube me permettrait d'ouvrir une multitude de portes et de vivre de ce que j'aime le plus ! C'est pour moi un projet très important que je compte concrétiser d'ici 2026.</p>
-
-          </div>
-        </div>
-        <!-- article - end -->
-                        <!-- article - start -->
-        <div class="flex flex-col overflow-hidden rounded-lg bg-gray-600 bg-opacity-20 backdrop-filter backdrop-blur-xl z-0 transition ease-in-out duration-300 hover:scale-95">
-          <a href="https://neocubes4.github.io/" target="_blank" class="group relative block h-48 overflow-hidden bg-gray-600 bg-opacity-20 md:h-64">
-            <img loading="lazy" src="rss/neocube.webp" loading="lazy" alt="loading..." class="absolute inset-0 h-full w-full object-cover object-center " />
-          </a>
-
-          <div class="flex flex-1 flex-col p-4 sm:p-6">
-            <h2 class="mb-2 text-lg font-semibold text-white">
-              <a class="transition duration-100 ">NeoCube</a>
-            </h2>
-
-            <p class="text-gray-300">Minecraft représente une grande partie de ma vie. Pendant des années, j'ai consommé du contenu et maintenant, je souhaite le créer.</p>
-
-          </div>
-        </div>
-        <!-- article - end -->
-                        <!-- article - start -->
-        <div class="flex flex-col overflow-hidden rounded-lg bg-gray-600 bg-opacity-20 backdrop-filter backdrop-blur-xl z-0 transition ease-in-out duration-300 hover:scale-95">
-          <a href="https://dorenew.tech/" target="_blank" class="group relative block h-48 overflow-hidden bg-gray-600 bg-opacity-20 md:h-64">
-            <img loading="lazy" src="https://github.com/doReNew/doReNew-WEB-RESSOURCES/raw/refs/heads/main/img/webp/logo-orange-cube.webp" loading="lazy" alt="loading..." class="absolute inset-0 h-full w-full object-cover object-center " />
-          </a>
-
-          <div class="flex flex-1 flex-col p-4 sm:p-6">
-            <h2 class="mb-2 text-lg font-semibold text-white">
-              <a class="transition duration-100 ">doReNew</a>
-            </h2>
-
-            <p class="text-gray-300">doReNew est derrière tous mes projets. À terme, j'aimerais créer une entreprise de création digitale et peut-être même lancer un vrai produit, un jour.</p>
-
-          </div>
-        </div>
-        <!-- article - end -->
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<footer class="slide-in-fwd-bottom">
+page en construction !!!
+<footer class="bg-[#0a0a0a] slide-in-fwd-bottom">
 
   <div class="pt-12 lg:pt-16">
     <div class="mx-auto max-w-screen-xl px-4 md:px-8">
@@ -551,8 +307,6 @@
             </a>
           </div>
           <!-- logo - end -->
-
-          <p class="mb-6 text-gray-500 sm:pr-8">Salut, moi c'est RedFly ! Depuis quelques années, j'aime de plus en plus travailler sur de gros projets. J'adore donner vie à mes idées, même si elles sont parfois assez abstraites. J'aime sortir des règles contemporaines et innover sur mes visuels.</p>
 
           <!-- social - start -->
           <div class="flex gap-4">
@@ -587,7 +341,6 @@
 
       <a href="https://www.youtube.com/@RedFlyHD">
         <div class="border-t border-dotted border-gray-500 py-8 text-center text-sm text-gray-400">@RedFlyHD</div>
-        <div class="text-center text-sm text-gray-600 text-opacity-50">V3.7.0 BETA 1</div>
       </a>
     </div>
   </div>
