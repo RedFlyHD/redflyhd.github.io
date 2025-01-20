@@ -451,3 +451,20 @@ $R: 150px
 	  transparent 100%
 	);
   }
+
+html, body {
+    overflow-x: hidden;
+    width: 100%;
+    position: relative;
+}
+
+
+.circles {
+    overflow: hidden;
+    width: 100%;
+}
+
+.mx-auto {
+    width: 100%;
+    max-width: 100vw;
+}
