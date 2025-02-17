@@ -259,7 +259,7 @@
     </a>
 
 
-      <a href="about" class="w-full flex items-center justify-center text-white transition ease-in-out text-xs h-full mr-1 rounded-full px-2 py-1 bg-white bg-opacity-0 scale-100 hover:bg-opacity-20 hover:scale-90">Infos</a>
+      <a href="#" id="openModalabout"  class="w-full flex items-center justify-center text-white transition ease-in-out text-xs h-full mr-1 rounded-full px-2 py-1 bg-white bg-opacity-0 scale-100 hover:bg-opacity-20 hover:scale-90">Infos</a>
       <a href="work" class="w-full flex items-center justify-center text-white transition ease-in-out text-xs h-full mr-1 rounded-full px-2 py-1 bg-white bg-opacity-0 scale-100 hover:bg-opacity-20 hover:scale-90">Projets</a>
       <a href="#" id="openModal" class="w-full flex items-center justify-center text-white transition ease-in-out text-xs h-full mr-1 rounded-full px-2 py-1 bg-white bg-opacity-0 scale-100 hover:bg-opacity-20 hover:scale-90">Contact</a>
 
@@ -332,7 +332,7 @@
 </section>
 
             <!-- Modal -->
-            <div id="contactmod" class="fixed inset-0 hidden items-center justify-center bg-black bg-opacity-5 backdrop-filter backdrop-blur-sm flex z-50">
+            <div id="contactmod" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-5 backdrop-filter backdrop-blur-sm z-50 pointer-events-none opacity-0 transition duration-300 transform scale-95">
               <div class="bg-white p-8 rounded-[24px] shadow-lg max-w-lg w-full z-50">
 
                 <iframe data-tally-src="https://tally.so/embed/warMgZ?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" width="100%" height="100%" frameborder="0" marginheight="0" marginwidth="0" title="Me contacter"></iframe><script>var d=document,w="https://tally.so/widgets/embed.js",v=function(){"undefined"!=typeof Tally?Tally.loadEmbeds():d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach((function(e){e.src=e.dataset.tallySrc}))};if("undefined"!=typeof Tally)v();else if(d.querySelector('script[src="'+w+'"]')==null){var s=d.createElement("script");s.src=w,s.onload=v,s.onerror=v,d.body.appendChild(s);}</script>
@@ -347,16 +347,20 @@
 
             <script>
               document.getElementById('openModal').addEventListener('click', function() {
-              document.getElementById('contactmod').classList.remove('hidden');
+                const modal = document.getElementById('contactmod');
+                modal.classList.remove('pointer-events-none', 'opacity-0', 'scale-95');
+                modal.classList.add('opacity-100', 'scale-100');
               });
 
               document.getElementById('closeModal').addEventListener('click', function() {
-              document.getElementById('contactmod').classList.add('hidden');
+                const modal = document.getElementById('contactmod');
+                modal.classList.remove('opacity-100', 'scale-100');
+                modal.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
               });
             </script>
 
                         <!-- Modal2 -->
-                        <div id="contactmod" class="fixed inset-0 hidden items-center justify-center bg-black bg-opacity-5 backdrop-filter backdrop-blur-sm flex z-50">
+                        <div id="contactmod" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-5 backdrop-filter backdrop-blur-sm z-50 pointer-events-none opacity-0 transition duration-300 transform scale-95">
                           <div class="bg-white p-8 rounded-[24px] shadow-lg max-w-lg w-full z-50">
             
                             <iframe data-tally-src="https://tally.so/embed/warMgZ?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" width="100%" height="100%" frameborder="0" marginheight="0" marginwidth="0" title="Me contacter"></iframe><script>var d=document,w="https://tally.so/widgets/embed.js",v=function(){"undefined"!=typeof Tally?Tally.loadEmbeds():d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach((function(e){e.src=e.dataset.tallySrc}))};if("undefined"!=typeof Tally)v();else if(d.querySelector('script[src="'+w+'"]')==null){var s=d.createElement("script");s.src=w,s.onload=v,s.onerror=v,d.body.appendChild(s);}</script>
@@ -371,13 +375,56 @@
             
                         <script>
                           document.getElementById('openModal2').addEventListener('click', function() {
-                          document.getElementById('contactmod').classList.remove('hidden');
+                            const modal = document.getElementById('contactmod');
+                            modal.classList.remove('pointer-events-none', 'opacity-0', 'scale-95');
+                            modal.classList.add('opacity-100', 'scale-100');
                           });
             
                           document.getElementById('closeModa2').addEventListener('click', function() {
-                          document.getElementById('contactmod').classList.add('hidden');
+                            const modal = document.getElementById('contactmod');
+                            modal.classList.remove('opacity-100', 'scale-100');
+                            modal.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
                           });
                         </script>
+
+<section>
+</section>
+
+<!-- about iframe -->
+<!-- About Modal -->
+<div id="aboutModal" class="fixed inset-0 flex items-center justify-center bg-black rounded-xl bg-opacity-50 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300">
+  <div class="relative bg-white rounded-xl w-11/12 md:w-3/4 lg:w-1/2 h-5/6 transform scale-95 transition-transform duration-300">
+    <iframe src="about.html" class="w-full h-full" frameborder="0"></iframe>
+    <button id="closeAboutModal" class="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black text-white px-6 py-2 rounded hover:bg-gray-800 transition">
+      Fermer
+    </button>
+  </div>
+</div>
+<script>
+  const aboutModal = document.getElementById('aboutModal');
+  const modalContent = aboutModal.querySelector('div');
+  
+  document.getElementById('openModalabout').addEventListener('click', function() {
+    // Show modal with animationx
+    aboutModal.classList.remove('pointer-events-none', 'opacity-0');
+    aboutModal.classList.add('opacity-100');
+    modalContent.classList.remove('scale-95');
+    modalContent.classList.add('scale-100');
+  });
+  
+  document.getElementById('closeAboutModal').addEventListener('click', function() {
+    // Hide modal with animation
+    aboutModal.classList.remove('opacity-100');
+    aboutModal.classList.add('opacity-0');
+    modalContent.classList.remove('scale-100');
+    modalContent.classList.add('scale-95');
+    setTimeout(() => {
+      aboutModal.classList.add('pointer-events-none');
+    }, 300);
+  });
+</script>
+
+
 
 <section>
 
@@ -591,7 +638,7 @@
 
       <a href="https://www.youtube.com/@RedFlyHD">
         <div class="border-t border-dotted border-gray-500 py-8 text-center text-sm text-gray-400">@RedFlyHD</div>
-        <div class="text-center text-sm text-gray-600 text-opacity-50">V3.7.0 BETA 3</div>
+        <div class="text-center text-sm text-gray-600 text-opacity-50">V3.8.0 BETA 1</div>
       </a>
     </div>
   </div>
