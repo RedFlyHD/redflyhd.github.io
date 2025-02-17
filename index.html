@@ -364,8 +364,8 @@
                           <div class="bg-white p-8 rounded-[24px] shadow-lg max-w-lg w-full z-50">
             
                             <iframe data-tally-src="https://tally.so/embed/warMgZ?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" width="100%" height="100%" frameborder="0" marginheight="0" marginwidth="0" title="Me contacter"></iframe><script>var d=document,w="https://tally.so/widgets/embed.js",v=function(){"undefined"!=typeof Tally?Tally.loadEmbeds():d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach((function(e){e.src=e.dataset.tallySrc}))};if("undefined"!=typeof Tally)v();else if(d.querySelector('script[src="'+w+'"]')==null){var s=d.createElement("script");s.src=w,s.onload=v,s.onerror=v,d.body.appendChild(s);}</script>
-            
-            
+
+
                             <button id="closeModa2" class="group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-lg bg-black px-6 font-medium text-neutral-200 transition ease-in-out duration-300 hover:scale-90">
                               <span>Fermer</span>
                               <div class="absolute inset-0 flex h-full w-full justify-center [transform:skew(-12deg)_translateX(-100%)] group-hover:duration-1000 group-hover:[transform:skew(-12deg)_translateX(100%)]">
@@ -394,24 +394,27 @@
 <!-- About Modal -->
 <div id="aboutModal" class="fixed inset-0 flex items-center justify-center bg-black rounded-xl bg-opacity-50 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300">
   <div class="relative bg-white rounded-xl w-11/12 md:w-3/4 lg:w-1/2 h-5/6 transform scale-95 transition-transform duration-300">
-    <iframe src="about.html" class="w-full h-full" frameborder="0"></iframe>
-    <button id="closeAboutModal" class="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black text-white px-6 py-2 rounded hover:bg-gray-800 transition">
-      Fermer
+    <iframe src="about iframe.html" class="w-full h-full" frameborder="0"></iframe>
+    <button id="closeAboutModal" class="group relative inline-flex w-full h-12 items-center justify-center overflow-hidden rounded-b-3xl bg-white px-6 font-medium text-black transition ease-in-out duration-300">
+      <span>Fermer</span>
+      <div class="absolute inset-0 flex h-full w-full justify-center [transform:skew(-12deg)_translateX(-100%)] group-hover:duration-5000 group-hover:[transform:skew(-12deg)_translateX(100%)]">
+        <div class="relative h-full w-8 bg-black/10"></div>
+      </div>
     </button>
   </div>
 </div>
 <script>
   const aboutModal = document.getElementById('aboutModal');
   const modalContent = aboutModal.querySelector('div');
-  
+
   document.getElementById('openModalabout').addEventListener('click', function() {
-    // Show modal with animationx
+    // Show modal with animation
     aboutModal.classList.remove('pointer-events-none', 'opacity-0');
     aboutModal.classList.add('opacity-100');
     modalContent.classList.remove('scale-95');
     modalContent.classList.add('scale-100');
   });
-  
+
   document.getElementById('closeAboutModal').addEventListener('click', function() {
     // Hide modal with animation
     aboutModal.classList.remove('opacity-100');
