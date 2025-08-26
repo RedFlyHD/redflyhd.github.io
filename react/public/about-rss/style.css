@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&display=swap');
+
+:root {
+  --bg: #090909;
+  --text: #fff;
+  --muted: rgba(255,255,255,.45);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; height: 100%; background: var(--bg); color: var(--text); font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif; }
+
+main { display: grid; place-items: center; min-height: 100dvh; }
+.content-wrapper { width: 100%; max-width: 1100px; padding: 24px; }
+.content { position: relative; }
+.main-content { display: grid; grid-template-columns: 340px 1fr; gap: 24px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08); backdrop-filter: blur(16px); border-radius: 24px; padding: 16px; }
+.photo-wrapper { aspect-ratio: 1/1; border-radius: 16px; overflow: hidden; background: #111; }
+.photo { width: 100%; height: 100%; object-fit: cover; display: block; }
+.main-info { display: flex; flex-direction: column; gap: 16px; }
+.title-container h1 { margin: 0; font-weight: 800; letter-spacing: -0.02em; }
+.title-info { display: flex; gap: 10px; align-items: center; color: var(--muted); }
+.divider { width: 1px; height: 14px; background: rgba(255,255,255,.2); }
+.songs { display: grid; gap: 8px; }
+.song { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border-radius: 12px; background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.06); cursor: default; }
+.song .bold { font-weight: 600; }
+.song .light { color: var(--muted); font-size: 14px; }
+.song .end { display: flex; align-items: center; gap: 8px; }
+
+.song-modal { margin-top: 12px; padding: 16px; border-radius: 16px; border: 1px solid rgba(255,255,255,.06); background: rgba(255,255,255,.02); }
+.song-modal .song { background: transparent; border: 0; padding: 0; }
+.song-modal-info { color: var(--text); }
+.song-credits { display: flex; align-items: center; gap: 10px; color: var(--muted); }
+
+.modal { position: relative; margin-top: 16px; border-radius: 16px; border: 1px solid rgba(255,255,255,.06); background: rgba(255,255,255,.02); overflow: hidden; }
+.modal .toggle { position: absolute; top: 12px; left: 12px; width: 36px; height: 36px; display: grid; place-items: center; border-radius: 10px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); }
+.modal .modal-content { display: grid; grid-template-columns: 180px 1fr; gap: 18px; padding: 16px; }
+.modal .photo-wrapper { border: 1px solid rgba(255,255,255,.12); }
+.modal .photo-wrapper h1 { margin: 8px 0 10px; font-size: 24px; text-align: center; }
+.modal .info-top { display: flex; align-items: center; justify-content: space-between; color: var(--muted); }
+.modal .info { font-size: 14px; line-height: 1.6; }
+.shade { position: absolute; inset: 0; background: radial-gradient(circle at 10% 0%, rgba(255,255,255,.06), transparent 50%), radial-gradient(circle at 90% 20%, rgba(255,255,255,.06), transparent 50%), radial-gradient(circle at 80% 100%, rgba(255,255,255,.06), transparent 50%); pointer-events: none; }
+
+.gradient-blur { position: absolute; inset: -40px; filter: blur(80px); opacity: .5; pointer-events: none; }
+.gradient-blur > div { position: absolute; width: 180px; height: 180px; border-radius: 50%; }
+.gradient-blur > div:nth-child(1) { top: 0; left: 0; background: #a78bfa; }
+.gradient-blur > div:nth-child(2) { top: 20%; left: 40%; background: #22d3ee; }
+.gradient-blur > div:nth-child(3) { top: 60%; left: 10%; background: #f472b6; }
+.gradient-blur > div:nth-child(4) { top: 50%; left: 70%; background: #60a5fa; }
+.gradient-blur > div:nth-child(5) { top: 10%; left: 80%; background: #34d399; }
+.gradient-blur > div:nth-child(6) { top: 80%; left: 80%; background: #f59e0b; }
+.gradient-blur > div:nth-child(7) { top: 30%; left: 20%; background: #ef4444; }
+.gradient-blur > div:nth-child(8) { top: 80%; left: 40%; background: #8b5cf6; }
+
+@media (max-width: 900px) {
+  .main-content { grid-template-columns: 1fr; }
+}
