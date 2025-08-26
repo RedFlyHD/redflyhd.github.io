@@ -22,9 +22,8 @@ export default function Home() {
         initial="hidden"
         animate={recentControls}
         variants={{ hidden: { opacity: 1 }, show: { opacity: 1 } }}
-        viewport={{ amount: 0.2, margin: '-80px' }}
+  viewport={{ amount: 0.15, once: true }}
         onViewportEnter={() => recentControls.start('show')}
-        onViewportLeave={() => recentControls.start('hidden')}
       >
         <motion.h2
           variants={{ hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0 } }}
@@ -82,9 +81,8 @@ export default function Home() {
     initial="hidden"
     animate={contactControls}
     variants={{ hidden: { opacity: 0, y: 10 }, show: { opacity: 1, y: 0 } }}
-    viewport={{ amount: 0.2, margin: '-80px' }}
+  viewport={{ amount: 0.15, once: true }}
     onViewportEnter={() => contactControls.start('show')}
-    onViewportLeave={() => contactControls.start('hidden')}
   >
     <div className="w-full overflow-hidden rounded-2xl bg-white/[0.03] backdrop-blur border border-white/10">
           <div className="grid sm:grid-cols-2">

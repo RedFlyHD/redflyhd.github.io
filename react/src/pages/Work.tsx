@@ -170,9 +170,8 @@ export default function Work() {
     initial="hidden"
     animate={sec2025}
     variants={{ hidden: { opacity: 0, y: 14 }, show: { opacity: 1, y: 0 } }}
-    viewport={{ amount: 0.2, margin: '-120px' }}
+  viewport={{ amount: 0.15, once: true }}
     onViewportEnter={() => sec2025.start('show')}
-    onViewportLeave={() => sec2025.start('hidden')}
   >
           <h2 className="relative ml-6 text-xl font-semibold">
             <span className="absolute left-[-24px] top-1/2 h-px w-5 -translate-y-1/2 bg-gradient-to-r from-white/60 to-transparent">
@@ -204,9 +203,8 @@ export default function Work() {
     initial="hidden"
     animate={sec2024}
     variants={{ hidden: { opacity: 0, y: 14 }, show: { opacity: 1, y: 0 } }}
-    viewport={{ amount: 0.2, margin: '-120px' }}
+  viewport={{ amount: 0.15, once: true }}
     onViewportEnter={() => sec2024.start('show')}
-    onViewportLeave={() => sec2024.start('hidden')}
   >
           <h2 className="relative ml-6 text-xl font-semibold">
             <span className="absolute left-[-24px] top-1/2 h-px w-5 -translate-y-1/2 bg-gradient-to-r from-white/60 to-transparent">
@@ -248,9 +246,8 @@ export default function Work() {
     initial="hidden"
     animate={sec2023}
     variants={{ hidden: { opacity: 0, y: 14 }, show: { opacity: 1, y: 0 } }}
-    viewport={{ amount: 0.2, margin: '-120px' }}
+  viewport={{ amount: 0.15, once: true }}
     onViewportEnter={() => sec2023.start('show')}
-    onViewportLeave={() => sec2023.start('hidden')}
   >
           <h2 className="relative ml-6 text-xl font-semibold">
             <span className="absolute left-[-24px] top-1/2 h-px w-5 -translate-y-1/2 bg-gradient-to-r from-white/60 to-transparent">
@@ -279,9 +276,8 @@ export default function Work() {
     initial="hidden"
     animate={sec2022}
     variants={{ hidden: { opacity: 0, y: 14 }, show: { opacity: 1, y: 0 } }}
-    viewport={{ amount: 0.2, margin: '-120px' }}
+  viewport={{ amount: 0.15, once: true }}
     onViewportEnter={() => sec2022.start('show')}
-    onViewportLeave={() => sec2022.start('hidden')}
   >
           <h2 className="relative ml-6 text-xl font-semibold">
             <span className="absolute left-[-24px] top-1/2 h-px w-5 -translate-y-1/2 bg-gradient-to-r from-white/60 to-transparent">
@@ -331,9 +327,8 @@ export default function Work() {
     initial="hidden"
     animate={sec2021}
     variants={{ hidden: { opacity: 0, y: 14 }, show: { opacity: 1, y: 0 } }}
-    viewport={{ amount: 0.2, margin: '-120px' }}
+  viewport={{ amount: 0.15, once: true }}
     onViewportEnter={() => sec2021.start('show')}
-    onViewportLeave={() => sec2021.start('hidden')}
   >
           <h2 className="relative ml-6 text-xl font-semibold">
             <span className="absolute left-[-24px] top-1/2 h-px w-5 -translate-y-1/2 bg-gradient-to-r from-white/60 to-transparent">
@@ -367,9 +362,8 @@ export default function Work() {
     initial="hidden"
     animate={sec2019}
     variants={{ hidden: { opacity: 0, y: 14 }, show: { opacity: 1, y: 0 } }}
-    viewport={{ amount: 0.2, margin: '-120px' }}
+  viewport={{ amount: 0.15, once: true }}
     onViewportEnter={() => sec2019.start('show')}
-    onViewportLeave={() => sec2019.start('hidden')}
   >
           <h2 className="relative ml-6 text-xl font-semibold">
             <span className="absolute left-[-24px] top-1/2 h-px w-5 -translate-y-1/2 bg-gradient-to-r from-white/60 to-transparent">
