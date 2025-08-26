@@ -11,6 +11,8 @@ type Props = {
 
 export default function ProjectCard({ title, image, href, date, onClick, actionLabel }: Props) {
   const cardRef = useRef<HTMLDivElement | null>(null)
+  const rafId = useRef<number | null>(null)
+  const lastXY = useRef<{ x: number; y: number } | null>(null)
 
   const onMove = (e: React.MouseEvent) => {
     const el = cardRef.current
@@ -18,14 +20,26 @@ export default function ProjectCard({ title, image, href, date, onClick, actionL
     const rect = el.getBoundingClientRect()
     const x = (e.clientX - rect.left) / rect.width - 0.5
     const y = (e.clientY - rect.top) / rect.height - 0.5
-    const rotX = (-y) * 4
-    const rotY = x * 6
-    el.style.transform = `perspective(800px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale(1.02)`
+    lastXY.current = { x, y }
+    if (rafId.current) return
+    rafId.current = requestAnimationFrame(() => {
+      const xy = lastXY.current
+      if (xy) {
+        const rotX = (-xy.y) * 4
+        const rotY = xy.x * 6
+        el.style.transform = `perspective(800px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale(1.02)`
+      }
+      rafId.current = null
+    })
   }
 
   const onLeave = () => {
     const el = cardRef.current
     if (!el) return
+    if (rafId.current) {
+      cancelAnimationFrame(rafId.current)
+      rafId.current = null
+    }
     el.style.transform = ''
   }
 
@@ -34,7 +48,7 @@ export default function ProjectCard({ title, image, href, date, onClick, actionL
       ref={cardRef}
       onMouseMove={onMove}
       onMouseLeave={onLeave}
-  className="group relative aspect-[16/9] min-h-[180px] sm:min-h-[220px] overflow-hidden rounded-xl shadow-lg transition-transform duration-300 will-change-transform motion-reduce:transform-none"
+  className="group relative aspect-[16/9] min-h-[180px] sm:min-h-[220px] overflow-hidden rounded-xl shadow-lg transition-transform duration-300 will-change-transform transform-gpu motion-reduce:transform-none"
     >
       <div className="absolute inset-0 overflow-hidden">
         <img

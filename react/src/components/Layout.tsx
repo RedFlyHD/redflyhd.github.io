@@ -131,7 +131,7 @@ export default function Layout() {
             <a href="https://www.youtube.com/@RedFlyHD" target="_blank" rel="noreferrer" className="hover:underline">
               @RedFlyHD
             </a>
-            <div className="mt-1 text-xs text-white/40">V4.0.1</div>
+            <div className="mt-1 text-xs text-white/40">V4.0.2</div>
           </div>
         </div>
       </footer>

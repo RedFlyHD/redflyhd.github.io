@@ -30,7 +30,7 @@ export default function Home() {
           transition={{ duration: 0.35 }}
           className="mb-4 text-xl font-semibold sm:mb-6 sm:text-2xl"
         >
-          Quelque un de mes projets
+          Quelques-uns de mes projets
         </motion.h2>
         <motion.div
           variants={listVariants}
@@ -48,17 +48,14 @@ export default function Home() {
           <motion.div variants={itemVariants}>
              <Link
               to="/work"
-              className="group relative block w-full overflow-hidden rounded-2xl bg-white/[0.035] backdrop-blur-md shadow-[0_8px_28px_rgba(0,0,0,0.22)] transition-all duration-300 hover:-translate-y-0.5 hover:scale-[1.01] hover:shadow-[0_16px_50px_rgba(0,0,0,0.35)] aspect-[16/9] min-h-[200px] sm:min-h-[240px]"
+              className="group relative block w-full overflow-hidden rounded-2xl bg-white/[0.05] shadow-[0_8px_20px_rgba(0,0,0,0.2)] transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-[0_12px_30px_rgba(0,0,0,0.28)] aspect-[16/9] min-h-[200px] sm:min-h-[240px] transform-gpu will-change-transform motion-reduce:transition-none motion-reduce:hover:transform-none"
               aria-label="Voir tous mes projets"
               title="Voir tous mes projets"
             >
-              <span className="pointer-events-none absolute inset-0 rounded-2xl bg-[radial-gradient(85%_85%_at_50%_0%,rgba(255,255,255,0.06),rgba(255,255,255,0))]" />
-
-              <span className="pointer-events-none absolute inset-0 rounded-2xl opacity-[0.25] [mask-image:radial-gradient(120%_120%_at_50%_-15%,black,transparent)] bg-[radial-gradient(80%_80%_at_50%_0%,rgba(139,92,246,0.08),rgba(139,92,246,0))]" />
-
-              <span className="pointer-events-none absolute inset-0 rounded-2xl opacity-[0.25] [mask-image:linear-gradient(to_bottom,black,transparent_85%)] [background-image:linear-gradient(to_right,rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.08)_1px,transparent_1px)] [background-size:20px_20px]" />
-
-              <span className="pointer-events-none absolute -inset-6 rounded-2xl bg-[radial-gradient(60%_60%_at_50%_50%,rgba(139,92,246,0.22),rgba(139,92,246,0))] blur-2xl opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+              <span className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-white/5 to-transparent" />
+              <span className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-b from-black/10 to-black/50 transition-[background] duration-300 group-hover:from-black/15 group-hover:to-black/60" />
+              <span className="pointer-events-none absolute inset-0 rounded-2xl opacity-20 transition-opacity duration-300 group-hover:opacity-30 [background-image:linear-gradient(to_right,rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.08)_1px,transparent_1px)] [background-size:22px_22px] [mask-image:radial-gradient(120%_160%_at_50%_-10%,black_0%,rgba(0,0,0,0.9)_35%,transparent_80%)] [mask-repeat:no-repeat] [mask-size:100%_100%]" />
+              <span className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100 bg-[radial-gradient(60%_60%_at_50%_50%,rgba(139,92,246,0.12),transparent)]" />
 
               <div className="absolute inset-0 z-10 grid place-items-center p-5 sm:p-6 text-center">
                 <div className="max-w-sm">
