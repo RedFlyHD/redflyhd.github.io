@@ -243,7 +243,7 @@ export default function Layout() {
                     <button
                       onClick={handleCopyDiscord}
                       className="group inline-flex w-full items-center justify-center gap-2 rounded-lg bg-white/10 px-4 py-2 text-sm transition hover:bg-white/20"
-                      aria-label={`Copier mon utilisateur Discord: ${DISCORD_USERNAME}`}
+                      aria-label={`Copier l'utilisateur Discord: ${DISCORD_USERNAME}`}
                     >
                       {!copiedDiscord ? (
                         <>
@@ -256,7 +256,7 @@ export default function Layout() {
                           >
                             <path d="M16 1H4c-1.1 0-2 .9-2 2v12h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" />
                           </svg>
-                          <span>Copier mon utilisateur</span>
+                          <span>Copier l'utilisateur</span>
                         </>
                       ) : (
                         <>
