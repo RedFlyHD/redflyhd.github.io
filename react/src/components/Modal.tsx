@@ -1,4 +1,5 @@
 import { useEffect, type ReactNode } from 'react'
+import { lockBodyScroll, unlockBodyScroll } from '../utils/bodyScrollLock'
 import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -15,7 +16,11 @@ export default function Modal({ open, onClose, children }: ModalProps) {
       if (e.key === 'Escape') onClose()
     }
     document.addEventListener('keydown', onKey)
-    return () => document.removeEventListener('keydown', onKey)
+    lockBodyScroll()
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      unlockBodyScroll()
+    }
   }, [open, onClose])
 
   return createPortal(

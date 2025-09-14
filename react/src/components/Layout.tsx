@@ -2,7 +2,10 @@ import { Outlet, useLocation } from 'react-router-dom'
 import Navbar from './Navbar'
 import Loader from './Loader'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { FaDiscord, FaInstagram, FaTwitter, FaYoutube, FaGithub, FaSpotify, FaTiktok, FaTwitch, FaXTwitter } from 'react-icons/fa6'
+import { HiOutlineEnvelope } from 'react-icons/hi2'
+import { lockBodyScroll, unlockBodyScroll } from '../utils/bodyScrollLock'
 import PageTransition from './PageTransition'
 import CustomCursor from './CustomCursor'
 import MobileNotice from './MobileNotice'
@@ -13,12 +16,30 @@ export default function Layout() {
   const [aboutOpen, setAboutOpen] = useState(false)
   const [contactOpen, setContactOpen] = useState(false)
   const [copiedDiscord, setCopiedDiscord] = useState(false)
+  const [confettiKey, setConfettiKey] = useState(0)
+  const contactCloseRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
       window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior })
     }
   }, [location.pathname])
+
+  // Accessibilité contact modal: Échap pour fermer + focus management
+  useEffect(() => {
+    if (!contactOpen) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setContactOpen(false)
+    }
+    document.addEventListener('keydown', onKey)
+    const t = setTimeout(() => contactCloseRef.current?.focus(), 0)
+    lockBodyScroll()
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      clearTimeout(t)
+      unlockBodyScroll()
+    }
+  }, [contactOpen])
 
   const handleCopyDiscord = async () => {
     const text = DISCORD_USERNAME
@@ -131,7 +152,7 @@ export default function Layout() {
             <a href="https://www.youtube.com/@RedFlyHD" target="_blank" rel="noreferrer" className="hover:underline">
               @RedFlyHD
             </a>
-            <div className="mt-1 text-xs text-white/40">V4.0.2</div>
+            <div className="mt-1 text-xs text-white/40">V4.1.0</div>
           </div>
         </div>
       </footer>
@@ -159,14 +180,19 @@ export default function Layout() {
                   <div className="relative z-10 min-w-0 space-y-3">
                     <div>
                       <h3 className="text-2xl font-bold">Maxence</h3>
-                      <p className="text-sm text-white/60">France • 16 ans • Créateur Numérique</p>
+                      <p className="text-sm text-white/60">France • Créateur Numérique</p>
                     </div>
                     <div className="space-y-3 text-sm leading-relaxed text-white/80">
-                      <p><u>Je suis qui ?</u> Dans la vraie vie, je m'appelle Maxence. J'habite en France et j'ai une vie banale. Rien de spécial à dire sur ma personne.</p>
-                      <p><u>Formations</u> Je suis actuellement au lycée. Tout ce que vous pouvez voir sur mes réseaux ou ailleurs a été appris en autodidacte (YouTube), du motion design au dev web, montage, animation 2D/3D.</p>
+                      <p>✨ Salut, moi c'est Maxence. Passionné par la création numérique, je touche à tout : motion design, 2D/3D, dev web, montage vidéo… J'adore imaginer des identités visuelles marquantes et des concepts interactifs qui sortent un peu de l'ordinaire.</p>
+                      
+                      <p>🎨 Je bosse en autodidacte depuis plusieurs années, en testant, en apprenant, et en partageant mes idées sur YouTube, TikTok et Insta (même si YouTube reste ma plateforme de cœur). J'aime aussi expérimenter sur After Effects, que ce soit pour des animations originales, ou pour donner vie à des univers plus créatifs.</p>
+                      
+                      <p>🚀 En 2025, mon objectif est de sortir des vidéos plus travaillées sur YouTube, pousser mes projets 2D/3D encore plus loin.</p>
                     </div>
                   </div>
                 </div>
+
+                {/* Section RedFly avec bannière */}
                 <div className="relative m-4 overflow-hidden rounded-xl border border-white/10 bg-white/[0.03] sm:m-6">
                   <div className="pointer-events-none absolute -inset-16 blur-2xl opacity-40">
                     <div className="absolute left-10 top-0 h-40 w-40 rounded-full bg-violet-500/30" />
@@ -200,6 +226,67 @@ export default function Layout() {
                     </div>
                   </div>
                 </div>
+
+                {/* Section liens sociaux intégrée dans le style */}
+                <div className="relative m-4 overflow-hidden rounded-xl border border-white/10 bg-white/[0.03] sm:m-6">
+                  <div className="relative p-4 sm:p-5">
+                    <h3 className="mb-4 text-lg font-bold tracking-tight">Mes liens</h3>
+                    
+                    {/* YouTube */}
+                    <div className="mb-4 space-y-2">
+                      <h4 className="text-sm font-medium text-white/60">YouTube</h4>
+                      <div className="grid gap-2 sm:grid-cols-2">
+                        <a href="https://www.youtube.com/@RedFlyHD" target="_blank" rel="noreferrer" className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 p-3 text-sm transition hover:bg-white/10">
+                          <FaYoutube className="h-4 w-4 text-red-500" />
+                          <span>RedFlyHD</span>
+                        </a>
+                        <a href="https://www.youtube.com/@redflyplus" target="_blank" rel="noreferrer" className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 p-3 text-sm transition hover:bg-white/10">
+                          <FaYoutube className="h-4 w-4 text-red-500" />
+                          <span>RedFly+</span>
+                        </a>
+                        <a href="https://www.youtube.com/@ReTechHD" target="_blank" rel="noreferrer" className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 p-3 text-sm transition hover:bg-white/10">
+                          <FaYoutube className="h-4 w-4 text-red-500" />
+                          <span>ReTechHD</span>
+                        </a>
+                        <a href="https://www.youtube.com/@RedFlyVOD" target="_blank" rel="noreferrer" className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 p-3 text-sm transition hover:bg-white/10">
+                          <FaYoutube className="h-4 w-4 text-red-500" />
+                          <span>RedFlyVOD</span>
+                        </a>
+                      </div>
+                    </div>
+
+                    {/* Autres réseaux */}
+                    <div className="space-y-2">
+                      <h4 className="text-sm font-medium text-white/60">Réseaux sociaux</h4>
+                      <div className="grid gap-2 sm:grid-cols-2">
+                        <a href="https://x.com/RedFlyHD" target="_blank" rel="noreferrer" className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 p-3 text-sm transition hover:bg-white/10">
+                          <FaXTwitter className="h-4 w-4 text-white" />
+                          <span>X (Twitter)</span>
+                        </a>
+                        <a href="https://discord.gg/tF57H253vP" target="_blank" rel="noreferrer" className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 p-3 text-sm transition hover:bg-white/10">
+                          <FaDiscord className="h-4 w-4 text-indigo-400" />
+                          <span>Discord</span>
+                        </a>
+                        <a href="https://www.tiktok.com/@redflyhd" target="_blank" rel="noreferrer" className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 p-3 text-sm transition hover:bg-white/10">
+                          <FaTiktok className="h-4 w-4 text-pink-400" />
+                          <span>TikTok</span>
+                        </a>
+                        <a href="https://www.twitch.tv/redflyhd" target="_blank" rel="noreferrer" className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 p-3 text-sm transition hover:bg-white/10">
+                          <FaTwitch className="h-4 w-4 text-purple-400" />
+                          <span>Twitch</span>
+                        </a>
+                        <a href="https://github.com/RedFlyHD" target="_blank" rel="noreferrer" className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 p-3 text-sm transition hover:bg-white/10">
+                          <FaGithub className="h-4 w-4 text-gray-300" />
+                          <span>GitHub</span>
+                        </a>
+                        <a href="https://open.spotify.com/user/cnt8f9pv1lzjrhcrj4v3rcpin" target="_blank" rel="noreferrer" className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 p-3 text-sm transition hover:bg-white/10">
+                          <FaSpotify className="h-4 w-4 text-green-400" />
+                          <span>Spotify</span>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
               <div className="flex justify-center p-4">
                 <button
@@ -217,88 +304,264 @@ export default function Layout() {
       <AnimatePresence>
         {contactOpen && (
           <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="contact-title"
+            className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
+            {/* Overlay clickable to close */}
             <motion.div
-              initial={{ scale: 0.96, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.96, opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="relative w-[92vw] max-w-3xl overflow-hidden rounded-2xl border border-white/10 bg-zinc-900 p-5 text-white"
+              className="absolute inset-0 bg-black/70 backdrop-blur-md"
+              onClick={() => setContactOpen(false)}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            />
+
+            {/* Sheet on mobile, card on desktop */}
+            <motion.div
+              initial={{ y: 24, scale: 1, opacity: 0.98 }}
+              animate={{ y: 0, scale: 1, opacity: 1 }}
+              exit={{ y: 24, scale: 1, opacity: 0 }}
+              transition={{ type: 'spring', stiffness: 260, damping: 24 }}
+              className="relative z-10 w-full max-h-[90dvh] sm:w-[92vw] sm:max-w-3xl overflow-hidden sm:rounded-2xl border border-white/10 bg-neutral-900/90 text-white backdrop-blur-xl sm:shadow-2xl sm:max-h-[85dvh] flex flex-col"
+              onClick={(e) => e.stopPropagation()}
             >
-              <div className="space-y-4">
-                <div className="grid items-center gap-4 overflow-hidden rounded-xl border border-white/10 bg-white/[0.03] p-4 sm:grid-cols-[140px_1fr_160px]">
-                  <div className="relative flex h-24 items-center justify-center overflow-hidden rounded-lg">
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#5865F2] via-[#4E5BE6] to-[#3C45C6]" />
-                    <img src="/rss/discord-icon.svg" className="relative h-10 w-10" alt="Discord" />
-                  </div>
-                  <div className="space-y-1">
-                    <h4 className="text-lg font-semibold">Discord</h4>
-                    <p className="text-sm text-white/70">Discussions rapides, réponses prioritaires et communauté.</p>
-                  </div>
-                  <div className="flex w-full flex-col items-stretch gap-2">
-                    <button
-                      onClick={handleCopyDiscord}
-                      className="group inline-flex w-full items-center justify-center gap-2 rounded-lg bg-white/10 px-4 py-2 text-sm transition hover:bg-white/20"
-                      aria-label={`Copier mon utilisateur Discord: ${DISCORD_USERNAME}`}
-                    >
-                      {!copiedDiscord ? (
-                        <>
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24"
-                            fill="currentColor"
-                            className="h-4 w-4 opacity-80 group-hover:opacity-100"
-                            aria-hidden="true"
-                          >
-                            <path d="M16 1H4c-1.1 0-2 .9-2 2v12h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" />
-                          </svg>
-                          <span>Copier mon utilisateur</span>
-                        </>
-                      ) : (
-                        <>
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24"
-                            fill="currentColor"
-                            className="h-4 w-4 text-emerald-400"
-                            aria-hidden="true"
-                          >
-                            <path d="M9 16.2l-3.5-3.5L4 14.2 9 19l12-12-1.5-1.5z" />
-                          </svg>
-                          <span className="text-emerald-300">Copié !</span>
-                        </>
-                      )}
-                    </button>
-                    <a
-                      href="https://discord.gg/tF57H253vP"
-                      target="_blank"
-                      rel="noreferrer"
-                      className="w-full rounded-lg bg-indigo-500 px-4 py-2 text-sm hover:bg-indigo-600"
-                    >
-                      Rejoindre le serveur
-                    </a>
-                  </div>
+              {/* Decorative animated glow */}
+              <div className="pointer-events-none absolute -inset-24 -z-10 opacity-40">
+                <motion.div
+                  className="absolute left-10 top-10 h-56 w-56 rounded-full bg-violet-500/30 blur-3xl"
+                  animate={{ y: [0, -10, 0], x: [0, 6, 0] }}
+                  transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+                />
+                <motion.div
+                  className="absolute right-10 bottom-10 h-56 w-56 rounded-full bg-indigo-500/30 blur-3xl"
+                  animate={{ y: [0, 12, 0], x: [0, -8, 0] }}
+                  transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
+                />
+              </div>
+
+              {/* Header */}
+              <div className="sticky top-0 z-20 flex items-center justify-between gap-3 border-b border-white/10 bg-neutral-900/80 px-4 py-3 sm:px-6 sm:py-4 backdrop-blur-xl">
+                <div className="min-w-0">
+                  <h3 id="contact-title" className="text-lg font-bold sm:text-xl">Me contacter</h3>
+                  <p className="mt-0.5 hidden text-sm text-white/70 sm:block">Envie de me contacter ? Vous pouvez utiliser l’un de ces moyens de communication ci-dessous.</p>
                 </div>
-                <div className="grid items-center gap-4 overflow-hidden rounded-xl border border-white/10 bg-white/[0.03] p-4 sm:grid-cols-[140px_1fr_160px]">
-                  <div className="relative flex h-24 items-center justify-center overflow-hidden rounded-lg">
-                    <div className="absolute inset-0 bg-gradient-to-br from-amber-300 via-pink-300 to-purple-400" />
+                <button
+                  ref={contactCloseRef}
+                  onClick={() => setContactOpen(false)}
+                  className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/10 text-white/90 ring-1 ring-white/10 transition hover:bg-white/20 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                  aria-label="Fermer le contact"
+                >
+                  <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
+                    <path d="M6.225 4.811 4.811 6.225 10.586 12l-5.775 5.775 1.414 1.414L12 13.414l5.775 5.775 1.414-1.414L13.414 12l5.775-5.775-1.414-1.414L12 10.586 6.225 4.811z" />
+                  </svg>
+                </button>
+              </div>
+
+              {/* Content (scrollable) */}
+              <div className="min-h-0 flex-1 overflow-y-auto">
+                <div className="grid gap-4 p-4 sm:gap-6 sm:p-6">
+                <motion.div
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.05 }}
+                  className="relative overflow-hidden rounded-xl border border-white/10 bg-white/[0.03]"
+                >
+                  <div className="pointer-events-none absolute -inset-10 opacity-50">
+                    <div className="absolute inset-0 [background:radial-gradient(240px_160px_at_20%_20%,rgba(139,92,246,0.12),transparent_60%),radial-gradient(260px_180px_at_80%_60%,rgba(79,70,229,0.12),transparent_60%)]" />
                   </div>
-                  <div className="space-y-1">
-                    <h4 className="text-lg font-semibold">Autres moyens de contact</h4>
-                    <p className="text-sm text-white/70">De nouveaux canaux arrivent bientôt. Restez connectés.</p>
+                    <div className="relative grid items-center gap-4 p-4 sm:grid-cols-[140px_1fr_220px] sm:p-5">
+                    <div className="relative flex h-24 items-center justify-center overflow-hidden rounded-lg ring-1 ring-white/10">
+                      <div className="absolute inset-0 bg-gradient-to-br from-[#5865F2] via-[#4E5BE6] to-[#3C45C6]" />
+                        <FaDiscord aria-hidden className="relative h-10 w-10" />
+                    </div>
+                    <div className="min-w-0 space-y-1">
+                      <h4 className="text-lg font-semibold">Discord</h4>
+                      <p className="text-sm text-white/70">Discord est mon moyen de communication préféré : je pourrai vous répondre rapidement. Vous pouvez aussi rejoindre mon serveur communautaire.</p>
+                    </div>
+                    <div className="col-span-full mt-2 grid grid-cols-1 gap-2 sm:col-auto sm:mt-0 sm:justify-self-end">
+                      {/* Rejoindre (haut) */}
+                      <a
+                        href="https://discord.gg/tF57H253vP"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="group relative inline-flex min-w-[140px] items-center justify-center overflow-hidden rounded-lg border border-white/10 bg-gradient-to-br from-sky-500 via-indigo-500 to-violet-600 px-4 py-2 text-sm font-semibold text-white shadow-[0_8px_30px_rgba(79,70,229,0.35)] transition focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 hover:brightness-110"
+                      >
+                        <span aria-hidden className="pointer-events-none absolute inset-0 rounded-lg ring-1 ring-white/20" />
+                        <span aria-hidden className="pointer-events-none absolute inset-y-0 -left-1/2 w-1/2 -skew-x-12 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 transition duration-700 group-hover:translate-x-[220%] group-hover:opacity-100" style={{ transform: 'translateX(-120%)' }} />
+                        <span className="relative z-10">Rejoindre</span>
+                      </a>
+
+                      {/* M'ajouter (bas) */}
+                      <button
+                        onClick={() => { setConfettiKey(Date.now()); handleCopyDiscord(); }}
+                        className="relative group inline-flex min-w-[140px] items-center justify-center gap-2 overflow-hidden rounded-lg border border-white/10 bg-white/10 px-4 py-2 text-sm font-medium text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition hover:bg-white/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                        aria-label={`Copier mon utilisateur Discord pour m'ajouter: ${DISCORD_USERNAME}`}
+                        aria-live="polite"
+                      >
+                        {/* Glow & shine */}
+                        <span aria-hidden className="pointer-events-none absolute inset-0 rounded-lg opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{ background: 'radial-gradient(180px_120px_at_var(--x,50%)_var(--y,50%),rgba(255,255,255,0.18),transparent_60%)' }} />
+                        <span aria-hidden className="pointer-events-none absolute inset-0 rounded-lg ring-1 ring-white/15" />
+                        <span aria-hidden className="pointer-events-none absolute inset-y-0 -left-1/2 w-1/2 -skew-x-12 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 transition duration-700 group-hover:translate-x-[220%] group-hover:opacity-100" style={{ transform: 'translateX(-120%)' }} />
+
+                        {/* Confetti burst */}
+                        <span aria-hidden className="pointer-events-none absolute inset-0" style={{ perspective: 600 }}>
+                          <AnimatePresence mode="popLayout">
+                            {copiedDiscord && (
+                              <motion.span key={confettiKey} className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+                                initial={{ opacity: 1 }}
+                                animate={{ opacity: [1, 1, 0] }}
+                                transition={{ duration: 0.9 }}
+                              >
+                                {Array.from({ length: 18 }).map((_, i) => {
+                                  const angle = (i / 18) * Math.PI * 2
+                                  const distance = 40 + Math.random() * 50
+                                  const x = Math.cos(angle) * distance
+                                  const y = Math.sin(angle) * distance
+                                  const size = 4 + Math.round(Math.random() * 3)
+                                  const colors = ['#22d3ee', '#60a5fa', '#a78bfa', '#34d399', '#f472b6', '#f59e0b']
+                                  const color = colors[i % colors.length]
+                                  return (
+                                    <motion.span
+                                      key={i}
+                                      className="absolute block rounded-full"
+                                      style={{ width: size, height: size, background: color }}
+                                      initial={{ x: 0, y: 0, scale: 0.6, rotate: 0 }}
+                                      animate={{ x, y, scale: 1, rotate: 180 + Math.random() * 180 }}
+                                      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                                    />
+                                  )
+                                })}
+                              </motion.span>
+                            )}
+                          </AnimatePresence>
+                        </span>
+
+                        {!copiedDiscord ? (
+                          <>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4 opacity-80 group-hover:opacity-100" aria-hidden="true">
+                              <path d="M15 12c2.761 0 5-2.239 5-5s-2.239-5-5-5-5 2.239-5 5 2.239 5 5 5zm-2 2h-2c-3.866 0-7 3.134-7 7v1h12v-1c0-1.657-.672-3.157-1.758-4.242A5.98 5.98 0 0013 14z" />
+                              <path d="M19 14v-2h-2v2h-2v2h2v2h2v-2h2v-2h-2z" />
+                            </svg>
+                            <span>M'ajouter</span>
+                          </>
+                        ) : (
+                          <motion.span initial={{ opacity: 0, y: 2 }} animate={{ opacity: 1, y: 0 }} className="inline-flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4 text-emerald-400" aria-hidden="true">
+                              <path d="M9 16.2l-3.5-3.5L4 14.2 9 19l12-12-1.5-1.5z" />
+                            </svg>
+                            <span className="text-emerald-300">Copié !</span>
+                          </motion.span>
+                        )}
+                      </button>
+                    </div>
                   </div>
-                  <div />
+                </motion.div>
+
+                {/* Email */}
+                <motion.div
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.18 }}
+                  className="relative overflow-hidden rounded-xl border border-white/10 bg-white/[0.03]"
+                >
+                  <div className="pointer-events-none absolute -inset-10 opacity-40">
+                    <div className="absolute inset-0 [background:radial-gradient(220px_140px_at_20%_20%,rgba(255,255,255,0.06),transparent_60%)]" />
+                  </div>
+                  <div className="relative grid items-center gap-4 p-4 sm:grid-cols-[140px_1fr_220px] sm:p-5">
+                    <div className="relative flex h-24 items-center justify-center overflow-hidden rounded-lg ring-1 ring-white/10">
+                      <div className="absolute inset-0 bg-gradient-to-br from-zinc-300/40 via-zinc-200/30 to-white/20" />
+                      <HiOutlineEnvelope aria-hidden className="relative h-10 w-10" />
+                    </div>
+                    <div className="min-w-0 space-y-1">
+                      <h4 className="text-lg font-semibold">Email</h4>
+                      <p className="text-sm text-white/70">Arrive bientôt.</p>
+                    </div>
+                    <div className="col-span-full mt-2 grid grid-cols-1 gap-2 sm:col-auto sm:mt-0 sm:justify-self-end">
+                      <span className="inline-flex min-w-[140px] items-center justify-center rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/70">Bientôt</span>
+                    </div>
+                  </div>
+                </motion.div>
+
+                {/* Instagram */}
+                <motion.div
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.22 }}
+                  className="relative overflow-hidden rounded-xl border border-white/10 bg-white/[0.03]"
+                >
+                  <div className="pointer-events-none absolute -inset-10 opacity-40">
+                    <div className="absolute inset-0 [background:radial-gradient(220px_140px_at_15%_80%,rgba(244,114,182,0.12),transparent_60%),radial-gradient(220px_140px_at_85%_20%,rgba(250,204,21,0.12),transparent_60%)]" />
+                  </div>
+                  <div className="relative grid items-center gap-4 p-4 sm:grid-cols-[140px_1fr_220px] sm:p-5">
+                    <div className="relative flex h-24 items-center justify-center overflow-hidden rounded-lg ring-1 ring-white/10">
+                      <div className="absolute inset-0 bg-gradient-to-br from-amber-300 via-pink-300 to-purple-400" />
+                      <FaInstagram aria-hidden className="relative h-10 w-10" />
+                    </div>
+                    <div className="min-w-0 space-y-1">
+                      <h4 className="text-lg font-semibold">Instagram</h4>
+                      <p className="text-sm text-white/70">J’ouvre rarement ce compte Instagram. Vous pouvez m’y contacter, mais je vous recommande vivement d’utiliser Discord.</p>
+                    </div>
+                    <div className="col-span-full mt-2 grid grid-cols-1 gap-2 sm:col-auto sm:mt-0 sm:justify-self-end">
+                      <a
+                        href="https://www.instagram.com/redflyhd/"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="group relative inline-flex min-w-[140px] items-center justify-center overflow-hidden rounded-lg border border-white/10 bg-gradient-to-br from-pink-500 via-rose-500 to-amber-400 px-4 py-2 text-sm font-semibold text-white shadow-[0_8px_30px_rgba(244,114,182,0.35)] transition hover:brightness-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                      >
+                        <span aria-hidden className="pointer-events-none absolute inset-0 rounded-lg ring-1 ring-white/20" />
+                        <span aria-hidden className="pointer-events-none absolute inset-y-0 -left-1/2 w-1/2 -skew-x-12 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 transition duration-700 group-hover:translate-x-[220%] group-hover:opacity-100" style={{ transform: 'translateX(-120%)' }} />
+                        <span className="relative z-10">Ouvrir</span>
+                      </a>
+                    </div>
+                  </div>
+                </motion.div>
+
+                {/* Twitter */}
+                <motion.div
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.26 }}
+                  className="relative overflow-hidden rounded-xl border border-white/10 bg-white/[0.03]"
+                >
+                  <div className="pointer-events-none absolute -inset-10 opacity-40">
+                    <div className="absolute inset-0 [background:radial-gradient(220px_140px_at_20%_20%,rgba(29,161,242,0.18),transparent_60%)]" />
+                  </div>
+                  <div className="relative grid items-center gap-4 p-4 sm:grid-cols-[140px_1fr_220px] sm:p-5">
+                    <div className="relative flex h-24 items-center justify-center overflow-hidden rounded-lg ring-1 ring-white/10">
+                      <div className="absolute inset-0 bg-gradient-to-br from-sky-400 via-sky-500 to-sky-600" />
+                      <FaTwitter aria-hidden className="relative h-10 w-10" />
+                    </div>
+                    <div className="min-w-0 space-y-1">
+                      <h4 className="text-lg font-semibold">Twitter</h4>
+                      <p className="text-sm text-white/70">J’ouvre parfois Twitter pour poster quelques petites blagues (pas toujours drôles avec le recul ). Comme pour Instagram, je vous recommande plutôt de passer par Discord, mais si c’est vraiment nécessaire, vous pouvez toujours me contacter sur Twitter.</p>
+                    </div>
+                    <div className="col-span-full mt-2 grid grid-cols-1 gap-2 sm:col-auto sm:mt-0 sm:justify-self-end">
+                      <a
+                        href="https://x.com/RedFlyHD"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="group relative inline-flex min-w-[140px] items-center justify-center overflow-hidden rounded-lg border border-white/10 bg-gradient-to-br from-[#1DA1F2] via-[#1A8CD8] to-[#1778BF] px-4 py-2 text-sm font-semibold text-white shadow-[0_8px_30px_rgba(29,161,242,0.35)] transition hover:brightness-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                      >
+                        <span aria-hidden className="pointer-events-none absolute inset-0 rounded-lg ring-1 ring-white/20" />
+                        <span aria-hidden className="pointer-events-none absolute inset-y-0 -left-1/2 w-1/2 -skew-x-12 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 transition duration-700 group-hover:translate-x-[220%] group-hover:opacity-100" style={{ transform: 'translateX(-120%)' }} />
+                        <span className="relative z-10">Ouvrir</span>
+                      </a>
+                    </div>
+                  </div>
+                </motion.div>
                 </div>
               </div>
 
-              <div className="mt-4 flex justify-center">
+              {/* Footer (sticky on mobile) */}
+              <div className="sticky bottom-0 z-20 flex items-center justify-center gap-3 border-t border-white/10 bg-neutral-900/80 px-4 py-3 sm:px-6 sm:py-4 backdrop-blur-xl">
                 <button
                   onClick={() => setContactOpen(false)}
-                  className="rounded-full bg-white/10 px-5 py-2 text-sm text-white transition hover:bg-white/20"
+                  className="inline-flex items-center justify-center rounded-full bg-white/10 px-5 py-2 text-sm text-white transition hover:bg-white/20"
                 >
                   Fermer
                 </button>

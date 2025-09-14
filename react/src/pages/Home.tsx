@@ -6,6 +6,18 @@ import { Link } from 'react-router-dom'
 export default function Home() {
   const recentControls = useAnimation()
   const contactControls = useAnimation()
+  const [afterOpacity, setAfterOpacity] = useState(0)
+  useEffect(() => {
+    const onScroll = () => {
+      const y = window.scrollY || window.pageYOffset || 0
+      const threshold = Math.max(140, Math.floor(window.innerHeight * 0.25))
+      const next = Math.max(0, Math.min(1, y / threshold))
+      setAfterOpacity(next)
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    onScroll()
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
   const listVariants: Variants = {
     hidden: { opacity: 0 },
     show: { opacity: 1, transition: { staggerChildren: 0.08 } },
@@ -16,8 +28,12 @@ export default function Home() {
   }
   return (
   <div className="space-y-10 sm:space-y-12">
-  <Hero />
+  <Hero revealProgress={afterOpacity} />
 
+      <div
+        className="space-y-10 sm:space-y-12 transition-opacity duration-200 will-change-[opacity]"
+        style={{ opacity: afterOpacity, pointerEvents: afterOpacity < 0.05 ? 'none' as const : 'auto' }}
+      >
       <motion.section
         initial="hidden"
         animate={recentControls}
@@ -92,11 +108,12 @@ export default function Home() {
           </div>
         </div>
       </motion.section>
+      </div>
     </div>
   )
 }
 
-function Hero() {
+function Hero({ revealProgress = 1 }: { revealProgress?: number }) {
   const [open, setOpen] = useState(false)
   const [mountVideo, setMountVideo] = useState(false)
   const [ambi, setAmbi] = useState(1)
@@ -105,6 +122,7 @@ function Hero() {
   const ambiVideoRef = useRef<HTMLVideoElement | null>(null)
   const rVfcId = useRef<number | null>(null)
   const syncIntervalId = useRef<number | null>(null)
+  const expand = Math.max(0, Math.min(1, 1 - revealProgress))
 
   useEffect(() => {
     const idle = (cb: () => void) => {
@@ -242,11 +260,11 @@ function Hero() {
             poster="/videos/hero-poster.webp"
             initial={false}
             animate={{
-              opacity: 0.2 + 0.3 * ambi,
-              scale: 1.08 + 0.08 * ambi,
-              filter: `blur(${Math.round(40 + 40 * ambi)}px) saturate(${110 + 20 * ambi}%) brightness(${40 + 6 * ambi}%)`,
+              opacity: 0.25 + 0.35 * ambi,
+              scale: (1.08 + 0.08 * ambi) + 0.04 * expand,
+              filter: `blur(${Math.round(44 + 44 * ambi + 8 * expand)}px) saturate(${115 + 22 * ambi}%) brightness(${42 + 6 * ambi}%)`,
             }}
-            transition={{ duration: 0.25, ease: 'easeOut' }}
+            transition={{ duration: 0.28, ease: 'easeOut' }}
             ref={ambiVideoRef}
           >
             {mountVideo && (
@@ -257,7 +275,13 @@ function Hero() {
             )}
           </motion.video>
         </div>
-        <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-black/30">
+        <motion.div
+          className="relative overflow-hidden rounded-2xl border border-white/10 bg-black/30 will-change-transform"
+          initial={false}
+          animate={{ scale: 1 + 0.05 * expand }}
+          transition={{ type: 'spring', stiffness: 120, damping: 18, mass: 0.4 }}
+          style={{ transformOrigin: '50% 25%' }}
+        >
           <div className="relative aspect-[16/9]">
             <video
               className="h-full w-full object-cover"
@@ -289,8 +313,8 @@ function Hero() {
               <div className="max-w-2xl text-center">
                 <motion.h1
                   initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 + 0.015 * expand }}
+                  transition={{ duration: 0.5, ease: 'easeOut' }}
                   className="text-2xl font-bold sm:text-4xl"
                 >
                   Repoussons les limites,<br />ensemble !
@@ -299,7 +323,7 @@ function Hero() {
                   <motion.p
                     initial={false}
                     animate={{ height: open ? 'auto' : 0, opacity: open ? 1 : 0 }}
-                    transition={{ duration: 0.25, ease: 'easeInOut' }}
+                    transition={{ duration: 0.28, ease: 'easeInOut' }}
                     className="overflow-hidden text-[13px] text-white/80 sm:text-sm"
                   >
                     Salut, moi c'est RedFly ! Depuis quelques années, j'aime de plus en plus travailler sur de gros projets. J'adore donner vie à mes idées, même si elles sont parfois assez abstraites. J'aime sortir des règles contemporaines et innover sur mes visuels.
@@ -329,7 +353,7 @@ function Hero() {
               </div>
             </motion.div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   )

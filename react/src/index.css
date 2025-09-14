@@ -14,6 +14,15 @@ body { @apply bg-neutral-950 text-neutral-100; }
 }
 .no-scrollbar::-webkit-scrollbar { display: none; }
 
+/* Hide scrollbars globally but keep scrolling working (Chrome/Safari/Opera/Firefox/IE) */
+* {
+	-ms-overflow-style: none; /* IE and Edge (legacy) */
+	scrollbar-width: none; /* Firefox */
+}
+*::-webkit-scrollbar {
+	display: none; /* Chrome, Safari, Opera */
+}
+
 @media (hover: hover) and (pointer: fine) {
 	html.custom-cursor-active body { cursor: none; }
 	html.custom-cursor-active a,
