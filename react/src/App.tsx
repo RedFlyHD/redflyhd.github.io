@@ -1,9 +1,12 @@
 import { Route, Routes } from 'react-router-dom'
 import Layout from './components/Layout'
-import Home from './pages/Home'
-import Work from './pages/Work'
-import Renew from './pages/Renew'
-import NotFound from './pages/NotFound'
+import { lazy } from 'react'
+
+// Code-split pages for route-level loading fallbacks
+const Home = lazy(() => import('./pages/Home'))
+const Work = lazy(() => import('./pages/Work'))
+const Renew = lazy(() => import('./pages/Renew'))
+const NotFound = lazy(() => import('./pages/NotFound'))
 
 export default function App() {
   return (

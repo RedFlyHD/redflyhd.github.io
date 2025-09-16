@@ -38,3 +38,7 @@ body { @apply bg-neutral-950 text-neutral-100; }
 }
 
 .cursor-auto { cursor: auto !important; }
+
+/* Skeleton shimmer */
+@keyframes skeleton-shimmer { to { transform: translateX(100%); } }
+.animate-skeleton-shimmer { animation: skeleton-shimmer 1.2s linear infinite; }

@@ -1,4 +1,5 @@
 import { useRef } from 'react'
+import ImageWithSkeleton from './ImageWithSkeleton'
 
 type Props = {
   title: string
@@ -60,10 +61,11 @@ export default function ProjectCard({ title, image, href, date, onClick, actionL
   className="group relative aspect-[16/9] min-h-[180px] sm:min-h-[220px] overflow-hidden rounded-xl shadow-lg will-change-transform transform-gpu motion-reduce:transform-none"
     >
       <div className="absolute inset-0 overflow-hidden">
-        <img
+        <ImageWithSkeleton
           src={image}
           alt={title}
           loading="lazy"
+          containerClassName="absolute inset-0"
           className="absolute inset-0 block h-full w-full object-cover object-center scale-[1.04] transition-transform duration-500 ease-out will-change-transform group-hover:scale-[1.07]"
         />
       </div>

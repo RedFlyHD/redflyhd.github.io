@@ -2,13 +2,15 @@ import { Outlet, useLocation } from 'react-router-dom'
 import Navbar from './Navbar'
 import Loader from './Loader'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useEffect, useRef, useState } from 'react'
+import { Suspense, useEffect, useRef, useState } from 'react'
 import { FaDiscord, FaInstagram, FaTwitter, FaYoutube, FaGithub, FaSpotify, FaTiktok, FaTwitch, FaXTwitter } from 'react-icons/fa6'
 import { HiOutlineEnvelope } from 'react-icons/hi2'
 import { lockBodyScroll, unlockBodyScroll } from '../utils/bodyScrollLock'
 import PageTransition from './PageTransition'
 import CustomCursor from './CustomCursor'
 import MobileNotice from './MobileNotice'
+import RouteProgress from './RouteProgress'
+import RouteSkeleton from './RouteSkeleton'
 const DISCORD_USERNAME = 'redflyhd' as const
 
 export default function Layout() {
@@ -70,6 +72,7 @@ export default function Layout() {
   return (
     <div className="min-h-dvh bg-[#0a0a0a]">
   <CustomCursor />
+      <RouteProgress />
       <Loader />
       <div className="pointer-events-none fixed inset-0 -z-10">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.25),rgba(255,255,255,0))]" />
@@ -83,7 +86,9 @@ export default function Layout() {
       <AnimatePresence mode="wait">
         <PageTransition>
           <main className="mx-auto max-w-7xl px-4 py-8">
-            <Outlet />
+            <Suspense fallback={<RouteSkeleton />}>
+              <Outlet />
+            </Suspense>
           </main>
         </PageTransition>
       </AnimatePresence>
@@ -152,7 +157,7 @@ export default function Layout() {
             <a href="https://www.youtube.com/@RedFlyHD" target="_blank" rel="noreferrer" className="hover:underline">
               @RedFlyHD
             </a>
-            <div className="mt-1 text-xs text-white/40">V4.2.0</div>
+            <div className="mt-1 text-xs text-white/40">V4.2.1</div>
           </div>
         </div>
       </footer>
