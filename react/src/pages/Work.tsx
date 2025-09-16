@@ -129,6 +129,10 @@ export default function Work() {
 
   const [openBloond, setOpenBloond] = useState(false)
   const [openYouTube, setOpenYouTube] = useState(false)
+  const [openPepito, setOpenPepito] = useState(false)
+  const [openNeoCube, setOpenNeoCube] = useState(false)
+  const [openKalshi, setOpenKalshi] = useState(false)
+  const [openDesastivale, setOpenDesastivale] = useState(false)
 
   return (
     <div className="relative sm:grid sm:grid-cols-[7rem,1fr] sm:gap-6">
@@ -193,6 +197,15 @@ export default function Work() {
             <motion.div variants={itemVariants}>
               <ProjectCard date="2025" title="Et maintenant ?" image="/minia/et maintenantFev1.png" href="https://www.youtube.com/watch?v=qnqZrftvB2I&list=PLmZyM6Vr837yt6o4VYKGuHN-xjYbga_sG&index=6" />
             </motion.div>
+            <motion.div variants={itemVariants}>
+              <ProjectCard
+                title={"Pepito'Boy"}
+                image="/rss/Pepito Boy banner.webp"
+                date={"2025"}
+                onClick={() => setOpenPepito(true)}
+                actionLabel="En savoir plus"
+              />
+            </motion.div>
           </motion.div>
         </motion.section>
 
@@ -220,6 +233,15 @@ export default function Work() {
             animate={sec2024}
             variants={listVariants}
           >
+            <motion.div variants={itemVariants}>
+              <ProjectCard
+                date="2024"
+                title="NeoCube"
+                image="/rss/NeoCube banner.webp"
+                onClick={() => setOpenNeoCube(true)}
+                actionLabel="En savoir plus"
+              />
+            </motion.div>
             <motion.div variants={itemVariants}>
             <ProjectCard date="2024" title="RedFly × Garfield" image="/minia/2024RedFly x Garfield.jpg" href="https://youtu.be/Mz2yruk83rE" />
             </motion.div>
@@ -264,7 +286,7 @@ export default function Work() {
             variants={listVariants}
           >
             <motion.div variants={itemVariants}>
-            <ProjectCard date="2023" title="New RedFly 2023" image="/rss/New RedFly 2023.webp" href="https://www.youtube.com/watch?v=xxxx" />
+            <ProjectCard date="2023" title="Meet new RedFly" image="/rss/MeetnewRedFlythumb.webp" href="https://www.youtube.com/watch?v=O86tnd0vWUI"/>
             </motion.div>
           </motion.div>
         </motion.section>
@@ -345,12 +367,13 @@ export default function Work() {
             variants={listVariants}
           >
             <motion.div variants={itemVariants}>
-            <ProjectCard
-              date="2021"
-              title="Desastivale Prototype 1 - Trailer"
-              image="/minia/2021.jpg"
-              href="https://www.youtube.com/watch?v=W9MdYg3KT30"
-            />
+              <ProjectCard
+                date="2021 → 2024 · Statut: Abandonné"
+                title="Desastivale"
+                image="/minia/2021.jpg"
+                onClick={() => setOpenDesastivale(true)}
+                actionLabel="En savoir plus"
+              />
             </motion.div>
           </motion.div>
         </motion.section>
@@ -379,6 +402,15 @@ export default function Work() {
             animate={sec2019}
             variants={listVariants}
           >
+            <motion.div variants={itemVariants}>
+              <ProjectCard
+                title="Kalshi Studio"
+                image="/rss/kalshi banner.webp"
+                date="2019 → 2024 · Statut: Abandonné"
+                onClick={() => setOpenKalshi(true)}
+                actionLabel="En savoir plus"
+              />
+            </motion.div>
             <motion.div variants={itemVariants}>
               <ProjectCard
                 title="Bloond Survie"
@@ -496,7 +528,254 @@ export default function Work() {
         </div>
       </Modal>
 
-  
+      <Modal open={openKalshi} onClose={() => setOpenKalshi(false)}>
+        <div className="relative">
+          <div className="relative h-48 w-full sm:h-56 overflow-hidden">
+            <img src="/rss/kalshi banner.webp" alt="Bannière Kalshi Studio" className="absolute inset-0 h-full w-full object-cover object-center" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+          </div>
+          <div className="p-5 sm:p-6">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+              <h3 className="text-xl font-bold">Kalshi Studio</h3>
+              <span className="inline-flex items-center gap-2 rounded-full bg-red-500/20 px-3 py-1 text-sm font-medium text-red-300">
+                <span className="h-2 w-2 rounded-full bg-red-400" /> Abandonné (2024)
+              </span>
+            </div>
+
+            <div className="mt-4 grid gap-4 sm:grid-cols-2">
+              <div className="rounded-lg bg-white/5 p-3">
+                <p className="text-xs uppercase tracking-wide text-white/60">Début</p>
+                <p className="text-sm">2019</p>
+              </div>
+              <div className="rounded-lg bg-white/5 p-3">
+                <p className="text-xs uppercase tracking-wide text-white/60">Fin</p>
+                <p className="text-sm">2024</p>
+              </div>
+            </div>
+
+            <div className="mt-5">
+              <h4 className="mb-2 text-sm font-semibold text-white/90">Description</h4>
+              <div className="space-y-2 text-sm text-white/80">
+                <p>
+                  Pensé fin 2018 – début 2019 comme un studio de création de jeux Roblox, Kalshi Studio a rapidement pivoté vers une « agence » de conception de serveurs Discord : structuration des salons, hiérarchies de rôles et permissions, esthétique et automatisations.
+                </p>
+                <p>
+                  En 2020, Kalshi Studio administre plusieurs gros serveurs, fédérant une communauté de plusieurs milliers de personnes. En 2021, l’activité « création de serveurs » cesse progressivement ; « Kalshi Studio » devient alors surtout une signature générique pour mes projets (« une production Kalshi »).
+                </p>
+                <p>
+                  En 2021/2022, je passe la main à quelques amis. Une petite équipe se forme et lance le développement d’un serveur Minecraft. Le projet reste toutefois en « assistance respiratoire » jusqu’en 2023, où je décide de tout débrancher pour faire le point.
+                </p>
+                <p>
+                  En 2023, je récupère l’ensemble et annonce plusieurs chantiers ambitieux : relancer des projets existants et en lancer de nouveaux (jeu de survie coop Desastivale, bot Discord complet, chaîne YouTube d’animations et de refontes en motion design, etc.).
+                </p>
+                <p>
+                  En 2024, un an plus tard, je ne me reconnais plus dans le nom ni la direction artistique de Kalshi. Je ferme donc le projet pour repartir sur de meilleures bases, avec un nouvel univers et des ambitions plus larges : doReNew.
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-5">
+              <h4 className="mb-2 text-sm font-semibold text-white/90">Note</h4>
+              <p className="text-sm text-white/80">
+                Clore Kalshi permet de repartir sainement : nouvelles idées, nouveau cadre, et une direction artistique plus actuelle. Mieux vaut une vraie relance sous un autre nom qu’une continuité tiède.
+              </p>
+            </div>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal open={openDesastivale} onClose={() => setOpenDesastivale(false)}>
+        <div className="relative">
+          <div className="relative h-48 w-full sm:h-56 overflow-hidden">
+            <img src="/minia/2021.jpg" alt="Bannière Desastivale" className="absolute inset-0 h-full w-full object-cover object-center" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+          </div>
+          <div className="p-5 sm:p-6">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <h3 className="text-xl font-bold">Desastivale</h3>
+              <span className="inline-flex items-center gap-2 rounded-full bg-red-500/20 px-3 py-1 text-sm font-medium text-red-300">
+                <span className="h-2 w-2 rounded-full bg-red-400" /> Abandonné
+              </span>
+            </div>
+
+            <div className="mt-4 grid gap-4 sm:grid-cols-2">
+              <div className="rounded-lg bg-white/5 p-3">
+                <p className="text-xs uppercase tracking-wide text-white/60">Début</p>
+                <p className="text-sm">2021</p>
+              </div>
+              <div className="rounded-lg bg-white/5 p-3">
+                <p className="text-xs uppercase tracking-wide text-white/60">Fin</p>
+                <p className="text-sm">2024</p>
+              </div>
+            </div>
+
+            <div className="mt-5">
+              <h4 className="mb-2 text-sm font-semibold text-white/90">Description</h4>
+              <div className="space-y-2 text-sm text-white/80">
+                <p>
+                  Lancé en 2021, alors que je m’éloignais de Kalshi Studio et amorçais Hape Studio, Desastivale visait un jeu solo mêlant exploration et survie dans un univers de science‑fiction.
+                </p>
+                <p>
+                  L’histoire se déroule dans un futur proche : l’humanité a colonisé son système solaire et maîtrise les voyages interstellaires. À la découverte d’une exoplanète possiblement habitable, l’ESA décide d’y envoyer les premiers humains.
+                </p>
+                <p>
+                  Concrètement, Desastivale est un jeu de construction d’usines et de véhicules en vue FPS, monde ouvert généré procéduralement, avec une forte part d’exploration et des combats contre des créatures hostiles. Le projet a aussi été pensé pour être très modulaire (mod loader et personnalisation avancée).
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-5">
+              <h4 className="mb-2 text-sm font-semibold text-white/90">Liens</h4>
+              <div className="flex flex-wrap gap-2">
+                <a
+                  href="https://www.youtube.com/watch?v=W9MdYg3KT30"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center rounded-full bg-white px-3 py-1 text-sm font-semibold text-black shadow"
+                >
+                  Trailer 2021
+                </a>
+                <a
+                  href="https://www.youtube.com/playlist?list=PLmZyM6Vr837w92L2GNOJKatQyz4bQATpj"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center rounded-full bg-white px-3 py-1 text-sm font-semibold text-black shadow"
+                >
+                  Playlist (2021 → 2024)
+                </a>
+              </div>
+            </div>
+
+            <div className="mt-5">
+              <h4 className="mb-2 text-sm font-semibold text-white/90">Note de fin</h4>
+              <div className="space-y-2 text-sm text-white/80">
+                <p>
+                  J’ai mis fin au projet car je ne m’y amusais plus et je ne me voyais pas consacrer ma vie au développement de jeux. À partir de 2024, seul le développement web m’intéressait encore. L’ambition et l’envie de tout peaufiner ralentissaient fortement l’avancée.
+                </p>
+                <p>
+                  Le projet a donc ralenti puis s’est arrêté en 2024. Une dernière “final update” a été publiée pour boucler la boucle (optimisations, correctifs, mises à jour du moteur, améliorations d’UI, etc.). Début 2025, j’ai officialisé la fin de Desastivale.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal open={openNeoCube} onClose={() => setOpenNeoCube(false)}>
+        <div className="relative">
+          <div className="relative h-48 w-full sm:h-56 overflow-hidden">
+            <img src="/rss/NeoCube banner.webp" alt="Bannière NeoCube" className="absolute inset-0 h-full w-full object-cover object-center" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+          </div>
+          <div className="p-5 sm:p-6">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <h3 className="text-xl font-bold">NeoCube</h3>
+              <div className="flex items-center gap-2">
+                <span className="inline-flex items-center gap-2 rounded-full bg-yellow-500/20 px-3 py-1 text-sm font-medium text-yellow-200">
+                  <span className="h-2 w-2 rounded-full bg-yellow-400" /> En développement / Pause
+                </span>
+                <a
+                  href="https://neocubes4.github.io"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center rounded-full bg-white px-3 py-1 text-sm font-semibold text-black shadow"
+                >
+                  Visiter le site
+                </a>
+              </div>
+            </div>
+
+            <div className="mt-4 grid gap-4 sm:grid-cols-2">
+              <div className="rounded-lg bg-white/5 p-3">
+                <p className="text-xs uppercase tracking-wide text-white/60">Début</p>
+                <p className="text-sm">2024</p>
+              </div>
+              <div className="rounded-lg bg-white/5 p-3">
+                <p className="text-xs uppercase tracking-wide text-white/60">Origines</p>
+                <p className="text-sm">2021 · Ultra‑Cube (Team Pepito)</p>
+              </div>
+
+            </div>
+
+            <div className="mt-5">
+              <h4 className="mb-2 text-sm font-semibold text-white/90">Description</h4>
+              <div className="space-y-2 text-sm text-white/80">
+                <p>
+                  NeoCube est un serveur Minecraft géopolitique qui se déroule après une guerre nucléaire mondiale. Les joueurs doivent survivre, reconstruire et façonner un nouvel ordre.
+                </p>
+                <p>
+                  Le développement a commencé en 2024, mais le projet puise ses racines en 2021 : à l’époque, il s’appelait Ultra‑Cube, un SMP privé pour la team Pepito. L’été 2024 marque une ouverture à plus de joueurs—une expérience super positive—et l’envie de refonder un serveur ambitieux.
+                </p>
+                <p>
+                  NeoCube s’inspire du célèbre serveur Minecraft “Decimation”, fermé le 9 avril 2023—un choc pour des milliers de joueurs (dont moi). Depuis, l’objectif est de redonner vie à cette expérience avec une vision neuve. “NeoCube” n’est qu’un nom de développement (codename) provisoire.
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-5">
+              <h4 className="mb-2 text-sm font-semibold text-white/90">Note</h4>
+              <p className="text-sm text-white/80">
+                Le projet est pour le moment en pause : un tel serveur nécessite des moyens techniques, économiques et humains importants. Plutôt que de lancer quelque chose d’insuffisant ou décevant, je préfère patienter pour revenir avec un vrai banger au lancement.
+              </p>
+            </div>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal open={openPepito} onClose={() => setOpenPepito(false)}>
+        <div className="relative">
+          <div className="relative h-48 w-full sm:h-56 overflow-hidden">
+            <img src="/rss/Pepito Boy banner.webp" alt={"Bannière Pepito'Boy"} className="absolute inset-0 h-full w-full object-cover object-center" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+          </div>
+          <div className="p-5 sm:p-6">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+              <h3 className="text-xl font-bold">{"Pepito'Boy"}</h3>
+              <span className="inline-flex items-center gap-2 rounded-full bg-emerald-500/20 px-3 py-1 text-sm font-medium text-emerald-200">
+                <span className="h-2 w-2 rounded-full bg-emerald-400" /> Actif
+              </span>
+            </div>
+
+            <div className="mt-4 grid gap-4 sm:grid-cols-2">
+              <div className="rounded-lg bg-white/5 p-3">
+                <p className="text-xs uppercase tracking-wide text-white/60">Disponibilité</p>
+                <p className="text-sm">Interne · Team Pepito</p>
+              </div>
+              <div className="rounded-lg bg-white/5 p-3">
+                <p className="text-xs uppercase tracking-wide text-white/60">Statut</p>
+                <p className="text-sm">Maintenu</p>
+              </div>
+            </div>
+
+            <div className="mt-5">
+              <h4 className="mb-2 text-sm font-semibold text-white/90">Description</h4>
+              <div className="space-y-2 text-sm text-white/80">
+                <p>
+                  {"Pepito'Boy est un système de LiveChat conçu pour dynamiser les streams des différents membres de la team pepito. Seul les membres autorisés peuvent envoyer des médias (images, vidéos, sons, texte) à un streameur sélectionné via les commandes slash Discord."}
+                </p>
+                <p>
+                  {"Le bot orchestre l'envoi en communiquant avec le serveur et la base de données. Côté affichage, un overlay web transparent—placé au-dessus des autres overlays de chaque streameur—injecte le média reçu directement dans le flux en cours."}
+                </p>
+                <p>
+                  {"Le projet est interne (non prévu pour un usage public pour l'instant) et activement maintenu à jour."}
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-5">
+              <h4 className="mb-2 text-sm font-semibold text-white/90">Fonctionnement</h4>
+              <ul className="list-disc space-y-1 pl-5 text-sm text-white/80">
+                <li>Commandes slash Discord pour envoyer image / vidéo / son / texte</li>
+                <li>Le bot relaie vers le serveur et la base de données</li>
+                <li>Overlay web transparent par streameur pour l&apos;affichage en live</li>
+                <li>Autorisations strictes · réservé à la team Pepito</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </Modal>
+ 
+
       </div>
     </div>
   )

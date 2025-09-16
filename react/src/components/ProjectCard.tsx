@@ -17,6 +17,8 @@ export default function ProjectCard({ title, image, href, date, onClick, actionL
   const onMove = (e: React.MouseEvent) => {
     const el = cardRef.current
     if (!el) return
+    // Disable transform transition while moving for immediate response
+    el.style.transition = 'transform 0s'
     const rect = el.getBoundingClientRect()
     const x = (e.clientX - rect.left) / rect.width - 0.5
     const y = (e.clientY - rect.top) / rect.height - 0.5
@@ -28,6 +30,11 @@ export default function ProjectCard({ title, image, href, date, onClick, actionL
         const rotX = (-xy.y) * 4
         const rotY = xy.x * 6
         el.style.transform = `perspective(800px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale(1.02)`
+        // Update CSS vars for metallic highlight position
+        const px = (xy.x + 0.5) * 100
+        const py = (xy.y + 0.5) * 100
+        el.style.setProperty('--px', `${px}%`)
+        el.style.setProperty('--py', `${py}%`)
       }
       rafId.current = null
     })
@@ -40,6 +47,8 @@ export default function ProjectCard({ title, image, href, date, onClick, actionL
       cancelAnimationFrame(rafId.current)
       rafId.current = null
     }
+    // Re-enable a smooth transition only for the return to neutral
+    el.style.transition = 'transform 380ms cubic-bezier(0.16,1,0.3,1)'
     el.style.transform = ''
   }
 
@@ -48,7 +57,7 @@ export default function ProjectCard({ title, image, href, date, onClick, actionL
       ref={cardRef}
       onMouseMove={onMove}
       onMouseLeave={onLeave}
-  className="group relative aspect-[16/9] min-h-[180px] sm:min-h-[220px] overflow-hidden rounded-xl shadow-lg transition-transform duration-300 will-change-transform transform-gpu motion-reduce:transform-none"
+  className="group relative aspect-[16/9] min-h-[180px] sm:min-h-[220px] overflow-hidden rounded-xl shadow-lg will-change-transform transform-gpu motion-reduce:transform-none"
     >
       <div className="absolute inset-0 overflow-hidden">
         <img
@@ -78,8 +87,19 @@ export default function ProjectCard({ title, image, href, date, onClick, actionL
           </path>
         </svg>
       </div>
-  <div className="absolute inset-0 flex items-end opacity-100 sm:opacity-0 transition duration-300 group-hover:opacity-100">
-    <div className="w-full translate-y-0 bg-black/50 p-3 sm:p-4 backdrop-blur transition duration-300 sm:translate-y-full sm:group-hover:translate-y-0">
+      {/* Metallic reflective highlight overlay */}
+      <div
+        className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        style={{
+          // Radial specular highlight following cursor + subtle brushed texture
+          background:
+            `radial-gradient( circle at var(--px, 50%) var(--py, 50%), rgba(255,255,255,0.45), rgba(255,255,255,0.18) 20%, rgba(255,255,255,0.05) 40%, rgba(255,255,255,0) 60%),` +
+            `repeating-linear-gradient( 115deg, rgba(255,255,255,0.06) 0 2px, rgba(0,0,0,0.06) 2px 4px )`,
+          mixBlendMode: 'soft-light',
+        }}
+      />
+      <div className="absolute inset-0 flex items-end opacity-100 sm:opacity-0 transition duration-300 group-hover:opacity-100">
+        <div className="w-full translate-y-0 bg-black/50 p-3 sm:p-4 backdrop-blur transition duration-300 sm:translate-y-full sm:group-hover:translate-y-0">
           <div className="flex items-center justify-between">
             <div>
               <h3 className="font-semibold">{title}</h3>
