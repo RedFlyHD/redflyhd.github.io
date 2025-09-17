@@ -12,14 +12,17 @@ import MobileNotice from './MobileNotice'
 import RouteProgress from './RouteProgress'
 import RouteSkeleton from './RouteSkeleton'
 const DISCORD_USERNAME = 'redflyhd' as const
+const LEGACY_VERSIONS = [{ label: 'Portfolio V3', href: '/V3' }] as const
 
 export default function Layout() {
   const location = useLocation()
   const [aboutOpen, setAboutOpen] = useState(false)
   const [contactOpen, setContactOpen] = useState(false)
+  const [versionMenuOpen, setVersionMenuOpen] = useState(false)
   const [copiedDiscord, setCopiedDiscord] = useState(false)
   const [confettiKey, setConfettiKey] = useState(0)
   const contactCloseRef = useRef<HTMLButtonElement>(null)
+  const versionMenuRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -42,6 +45,30 @@ export default function Layout() {
       unlockBodyScroll()
     }
   }, [contactOpen])
+
+  useEffect(() => {
+    if (!versionMenuOpen) return
+
+    const handlePointerDown = (event: PointerEvent) => {
+      if (!versionMenuRef.current?.contains(event.target as Node)) {
+        setVersionMenuOpen(false)
+      }
+    }
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setVersionMenuOpen(false)
+      }
+    }
+
+    document.addEventListener('pointerdown', handlePointerDown)
+    document.addEventListener('keydown', handleKeyDown)
+    return () => {
+      document.removeEventListener('pointerdown', handlePointerDown)
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [versionMenuOpen])
+
 
   const handleCopyDiscord = async () => {
     const text = DISCORD_USERNAME
@@ -95,13 +122,67 @@ export default function Layout() {
 
       <footer className="border-t border-white/10">
         <div className="mx-auto max-w-7xl px-4 py-8">
-          <div className="mb-6 grid grid-cols-1 items-center gap-6 md:grid-cols-2">
-            <div>
+          <div className="mb-6 flex flex-col gap-6 md:flex-row md:items-center md:gap-8">
+            <div className="flex w-full justify-center md:w-auto md:flex-1 md:justify-start">
               <a href="/" aria-label="logo" className="inline-flex items-center gap-2 text-xl font-bold text-white md:text-2xl">
                 RedFly
               </a>
             </div>
-            <div className="flex justify-start gap-4 md:justify-end">
+            <div className="flex w-full justify-center md:w-auto">
+              <div className="relative" ref={versionMenuRef}>
+                <button
+                  type="button"
+                  onClick={() => setVersionMenuOpen((prev) => !prev)}
+                  className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-medium text-white/80 transition hover:border-white/30 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
+                  aria-haspopup="listbox"
+                  aria-expanded={versionMenuOpen}
+                  aria-controls="legacy-versions-menu"
+                >
+                  Anciennes versions
+                  <motion.span
+                    animate={{ rotate: versionMenuOpen ? 180 : 0 }}
+                    transition={{ duration: 0.2, ease: 'easeInOut' }}
+                    className="inline-flex"
+                  >
+                    <svg aria-hidden className="h-3.5 w-3.5" viewBox="0 0 14 14" fill="none">
+                      <path d="M3 5l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </motion.span>
+                </button>
+                <AnimatePresence>
+                  {versionMenuOpen && (
+                    <motion.div
+                      key="legacy-menu"
+                      initial={{ opacity: 0, y: -6, scale: 0.98 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -6, scale: 0.98 }}
+                      transition={{ duration: 0.16, ease: 'easeOut' }}
+                      className="absolute bottom-full left-1/2 z-20 mb-3 w-64 -translate-x-1/2 transform space-y-2 overflow-hidden rounded-xl border border-white/10 bg-neutral-900/95 p-3 shadow-[0_12px_32px_rgba(0,0,0,0.35)] backdrop-blur"
+                    >
+                      <div className="rounded-lg border border-amber-400/30 bg-amber-500/10 p-3 text-xs text-amber-100">
+                        <p>Ces versions archivees ne sont plus maintenues.</p>
+                        <p className="mt-1">La page actuelle (V4) contient mes projets les plus recents, reste la plus elegante et fonctionne sur la plupart des appareils.</p>
+                      </div>
+                      <ul id="legacy-versions-menu" role="listbox" className="space-y-1">
+                        {LEGACY_VERSIONS.map((version) => (
+                          <li key={version.href}>
+                            <a
+                              href={version.href}
+                              className="flex flex-col rounded-lg px-3 py-2 text-sm text-white/80 transition hover:bg-white/10 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
+                              onClick={() => setVersionMenuOpen(false)}
+                            >
+                              <span className="font-medium">{version.label}</span>
+                              <span className="text-xs text-white/60">Ouvrir la version precedente</span>
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </div>
+            <div className="flex w-full flex-wrap justify-center gap-4 md:flex-1 md:justify-end">
               <a
                 href="https://www.instagram.com/redflyhd/"
                 target="_blank"
@@ -152,12 +233,11 @@ export default function Layout() {
               </a>
             </div>
           </div>
-
           <div className="border-t border-dotted border-white/10 py-6 text-center text-sm text-white/60">
             <a href="https://www.youtube.com/@RedFlyHD" target="_blank" rel="noreferrer" className="hover:underline">
               @RedFlyHD
             </a>
-            <div className="mt-1 text-xs text-white/40">V4.2.3</div>
+            <div className="mt-1 text-xs text-white/40">V4.2.4</div>
           </div>
         </div>
       </footer>
@@ -578,3 +658,5 @@ export default function Layout() {
     </div>
   )
 }
+
+
