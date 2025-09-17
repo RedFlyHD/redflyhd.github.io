@@ -40,8 +40,10 @@ jobs:
         run: |
           rm -rf dist && mkdir dist
           cp -r react/dist/* dist/
-          # SPA fallback
-          cp dist/index.html dist/404.html || true
+          # SPA fallback (only if missing)
+          if [ ! -f dist/404.html ]; then
+            cp dist/index.html dist/404.html
+          fi
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
