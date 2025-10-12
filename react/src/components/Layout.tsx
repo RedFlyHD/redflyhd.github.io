@@ -3,8 +3,8 @@ import Navbar from './Navbar'
 import Loader from './Loader'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Suspense, useEffect, useRef, useState } from 'react'
-import { FaDiscord, FaInstagram, FaTwitter, FaYoutube, FaGithub, FaSpotify, FaTiktok, FaTwitch, FaXTwitter } from 'react-icons/fa6'
-import { HiOutlineEnvelope } from 'react-icons/hi2'
+import { FaDiscord, FaInstagram, FaTwitter, FaYoutube, FaGithub, FaSpotify, FaTiktok, FaTwitch, FaXTwitter, FaFilePdf } from 'react-icons/fa6'
+import { HiOutlineEnvelope, HiOutlineExclamationTriangle, HiOutlineArrowDownTray, HiOutlineXMark } from 'react-icons/hi2'
 import { lockBodyScroll, unlockBodyScroll } from '../utils/bodyScrollLock'
 import PageTransition from './PageTransition'
 import CustomCursor from './CustomCursor'
@@ -18,6 +18,8 @@ export default function Layout() {
   const location = useLocation()
   const [aboutOpen, setAboutOpen] = useState(false)
   const [contactOpen, setContactOpen] = useState(false)
+  const [confirmBrochureOpen, setConfirmBrochureOpen] = useState(false)
+  const [shouldReopenAbout, setShouldReopenAbout] = useState(false)
   const [versionMenuOpen, setVersionMenuOpen] = useState(false)
   const [copiedDiscord, setCopiedDiscord] = useState(false)
   const [confettiKey, setConfettiKey] = useState(0)
@@ -106,7 +108,16 @@ export default function Layout() {
         <div className="absolute inset-0 bg-transparent [background:radial-gradient(#ffffff0f_1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,#000_60%,transparent_100%)]" />
       </div>
 
-      <Navbar onOpenAbout={() => setAboutOpen(true)} onOpenContact={() => setContactOpen(true)} />
+      <Navbar
+        onOpenAbout={() => setAboutOpen(true)}
+        onOpenContact={() => setContactOpen(true)}
+        onAnyNavClick={() => {
+          // Close any open modal when navigating via navbar
+          setAboutOpen(false)
+          setContactOpen(false)
+          setConfirmBrochureOpen(false)
+        }}
+      />
 
   <MobileNotice />
 
@@ -259,8 +270,25 @@ export default function Layout() {
             >
               <div className="flex-1 overflow-y-auto">
                 <div className="relative grid grid-cols-1 gap-4 p-4 sm:grid-cols-[200px_1fr] sm:gap-6 sm:p-6">
-                  <div className="relative z-0 h-48 w-full overflow-hidden rounded-xl border border-white/10 sm:h-[200px]">
-                    <img src="/rss/IRL.jpg" alt="Portrait" className="h-full w-full object-cover" />
+                  <div className="relative z-0">
+                    <div className="h-48 w-full overflow-hidden rounded-xl border border-white/10 sm:h-[200px]">
+                      <img src="/rss/IRL.jpg" alt="Portrait" className="h-full w-full object-cover" />
+                    </div>
+                    <div className="mt-3">
+                      <button
+                        onClick={() => {
+                          // Flow: close About, open confirmation
+                          setAboutOpen(false)
+                          // mark to reopen after confirm closes
+                          setShouldReopenAbout(true)
+                          setConfirmBrochureOpen(true)
+                        }}
+                        className="flex w-full items-center justify-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-black shadow-sm transition hover:bg-white/90"
+                      >
+                        <FaFilePdf className="h-4 w-4" aria-hidden />
+                        <span>Télécharger la brochure</span>
+                      </button>
+                    </div>
                   </div>
                   <div className="relative z-10 min-w-0 space-y-3">
                     <div>
@@ -302,11 +330,10 @@ export default function Layout() {
                         <h3 className="text-2xl font-bold tracking-tight sm:text-3xl hover:underline">RedFly</h3>
                       </a>
                       <p className="text-sm leading-relaxed text-white/80">
-                        Je suis apparu pour la première fois sur Internet sous le pseudo RedStone64. En 2019, j'ai changé pour
-                        RedFly32. En 2022, j'ai créé mon premier vrai logo et j'ai lancé ReNew pour l'annoncer. Nouveaux logos en 2024
-                        (janvier puis 4 juin), et le dernier le 28 février 2025. Je possède 4 logos (R, V, B + violet). En 2025, je fais
-                        un reset: le gaming part sur RedFly+, et je vise des vidéos 2D/3D plus travaillées sur RedFly. Première vidéo visée:
-                        4 juin 2025.
+                        Je suis apparu pour la première fois sur Internet sous le pseudo RedStone64. En 2019, j'ai changé pour RedFly32.
+                        En 2022, j'ai créé mon premier vrai logo et j'ai lancé ReNew pour l'annoncer. Nouveaux logos en 2024 (janvier puis
+                        juin), et le dernier en février 2025. Je possède 4 logos (R, V, B + violet). En 2025, je fais un reset : le gaming
+                        part sur RedFly+, et je vise des vidéos 2D/3D plus travaillées sur RedFly. Première vidéo visée : 2026.
                       </p>
                     </div>
                   </div>
@@ -380,6 +407,94 @@ export default function Layout() {
                 >
                   Fermer
                 </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Confirmation modal: Télécharger la brochure */}
+      <AnimatePresence>
+        {confirmBrochureOpen && (
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => {
+              setConfirmBrochureOpen(false)
+              if (shouldReopenAbout) {
+                setAboutOpen(true)
+                setShouldReopenAbout(false)
+              }
+            }}
+          >
+            <motion.div
+              initial={{ scale: 0.96, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.96, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="relative flex w-[92vw] max-w-3xl flex-col overflow-hidden rounded-2xl border border-white/10 bg-neutral-900 text-white"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Decorative glow */}
+              <div className="pointer-events-none absolute -inset-24 opacity-40">
+                <div className="absolute left-10 top-8 h-40 w-40 rounded-full bg-violet-500/20 blur-2xl" />
+                <div className="absolute right-10 bottom-8 h-40 w-40 rounded-full bg-indigo-500/20 blur-2xl" />
+              </div>
+
+              <div className="relative p-6 sm:p-8">
+                <div className="mx-auto flex max-w-xl flex-col items-center text-center">
+                  <motion.div
+                    initial={{ y: 6, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                    className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-amber-500/15 text-amber-300 ring-1 ring-amber-400/30"
+                    aria-hidden
+                  >
+                    <HiOutlineExclamationTriangle className="h-6 w-6" />
+                  </motion.div>
+                  <h3 className="text-xl font-bold">Télécharger ma brochure (PDF)</h3>
+                  <div className="mt-3 space-y-3 text-sm leading-relaxed text-white/80">
+                    <p>
+                      Le PDF est relativement lourd. Selon la puissance de votre appareil et votre connexion, l’ouverture ou le téléchargement peut
+                      prendre du temps et peut faire ralentir votre appareil.
+                    </p>
+                    <p>
+                      Une version allégée, ainsi qu’une version encore plus haute qualité arrivent bientôt.
+                    </p>
+                  </div>
+                  <div className="mt-5 flex w-full flex-col items-stretch gap-2 sm:flex-row sm:justify-center">
+                    <button
+                      onClick={() => {
+                        setConfirmBrochureOpen(false)
+                        if (shouldReopenAbout) {
+                          setAboutOpen(true)
+                          setShouldReopenAbout(false)
+                        }
+                      }}
+                      className="inline-flex items-center justify-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm text-white transition hover:bg-white/20"
+                    >
+                      <HiOutlineXMark className="h-4 w-4" aria-hidden />
+                      <span>Annuler</span>
+                    </button>
+                    <a
+                      href="/RedFlyHD%20BOOK.pdf"
+                      download
+                      onClick={() => {
+                        setConfirmBrochureOpen(false)
+                        if (shouldReopenAbout) {
+                          setAboutOpen(true)
+                          setShouldReopenAbout(false)
+                        }
+                      }}
+                      className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-black shadow-sm transition hover:bg-white/90"
+                    >
+                      <HiOutlineArrowDownTray className="h-4 w-4" aria-hidden />
+                      <span>Télécharger la brochure</span>
+                    </a>
+                  </div>
+                </div>
               </div>
             </motion.div>
           </motion.div>

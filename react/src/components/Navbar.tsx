@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import FancyContactButton from './FancyContactButton'
 import { MouseEvent, useRef, useState } from 'react'
 
-function LinkNav({ to, children, end = false }: { to: string; children: React.ReactNode; end?: boolean }) {
+function LinkNav({ to, children, end = false, onAnyNavClick }: { to: string; children: React.ReactNode; end?: boolean; onAnyNavClick?: () => void }) {
   const shellRef = useRef<HTMLDivElement>(null)
   const [dir, setDir] = useState<'l' | 'r'>('r')
   const location = useLocation()
@@ -35,14 +35,14 @@ function LinkNav({ to, children, end = false }: { to: string; children: React.Re
         style={{ transformOrigin: dir === 'l' ? 'left center' : 'right center' }}
       />
       <span className="pointer-events-none absolute inset-0 -z-10 rounded-full [background:radial-gradient(120px_120px_at_var(--x)_var(--y),rgba(255,255,255,0.10),transparent_60%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-  <NavLink to={to} end={end} className={`relative z-10 flex h-full items-center rounded-full px-3 text-xs leading-none transition`}>
+  <NavLink to={to} end={end} onClick={onAnyNavClick} className={`relative z-10 flex h-full items-center rounded-full px-3 text-xs leading-none transition`}>
         {children}
       </NavLink>
     </div>
   )
 }
 
-function ButtonNav({ onClick, children }: { onClick?: () => void; children: React.ReactNode }) {
+function ButtonNav({ onClick, children, onAnyNavClick }: { onClick?: () => void; children: React.ReactNode; onAnyNavClick?: () => void }) {
   const shellRef = useRef<HTMLButtonElement>(null)
   const [dir, setDir] = useState<'l' | 'r'>('r')
   const onMove = (e: MouseEvent<HTMLButtonElement>) => {
@@ -63,7 +63,7 @@ function ButtonNav({ onClick, children }: { onClick?: () => void; children: Reac
   return (
     <button
       ref={shellRef}
-      onClick={onClick}
+      onClick={() => { onAnyNavClick?.(); onClick?.(); }}
       onMouseMove={onMove}
       onMouseEnter={onEnter}
       className="group relative inline-flex h-8 items-center overflow-hidden rounded-full px-3 text-xs leading-none"
@@ -78,7 +78,9 @@ function ButtonNav({ onClick, children }: { onClick?: () => void; children: Reac
   )
 }
 
-export default function Navbar({ onOpenAbout, onOpenContact }: { onOpenAbout?: () => void; onOpenContact?: () => void }) {
+export default function Navbar({ onOpenAbout, onOpenContact, onAnyNavClick }: { onOpenAbout?: () => void; onOpenContact?: () => void; onAnyNavClick?: () => void }) {
+  const handleOpenAbout = () => { onAnyNavClick?.(); onOpenAbout?.(); }
+  const handleOpenContact = () => { onAnyNavClick?.(); onOpenContact?.(); }
   return (
   <div className="sticky top-0 z-50 flex justify-center px-3 pt-[calc(env(safe-area-inset-top)+0.75rem)]">
     <motion.nav
@@ -93,20 +95,20 @@ export default function Navbar({ onOpenAbout, onOpenContact }: { onOpenAbout?: (
         </Link>
 
     <div className="flex min-w-0 flex-1 items-center justify-center gap-1.5 overflow-x-auto no-scrollbar sm:justify-end">
-          <LinkNav to="/" end>
+          <LinkNav to="/" end onAnyNavClick={onAnyNavClick}>
             Accueil
           </LinkNav>
-          <ButtonNav onClick={onOpenAbout}>
+          <ButtonNav onClick={handleOpenAbout} onAnyNavClick={onAnyNavClick}>
             Infos
           </ButtonNav>
-          <LinkNav to="/work">
+          <LinkNav to="/work" onAnyNavClick={onAnyNavClick}>
             Projets
           </LinkNav>
         </div>
 
         <div className="flex items-center gap-1 shrink-0">
           <button
-            onClick={onOpenContact}
+            onClick={handleOpenContact}
             aria-label="Contact"
             id="openContactBtnMobile"
             className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/10 text-white hover:bg-white/20 sm:hidden"
@@ -117,7 +119,7 @@ export default function Navbar({ onOpenAbout, onOpenContact }: { onOpenAbout?: (
             </svg>
           </button>
           <div className="hidden sm:block">
-            <FancyContactButton onClick={onOpenContact} />
+            <FancyContactButton onClick={handleOpenContact} />
           </div>
         </div>
   </motion.nav>
