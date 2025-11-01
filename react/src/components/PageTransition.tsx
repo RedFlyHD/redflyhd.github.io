@@ -9,7 +9,7 @@ export default function PageTransition({ children }: { children: React.ReactNode
   const modeRef = useRef<'h' | 'v'>('v')
 
   useEffect(() => {
-    const order = ['/', '/work', '/renew']
+    const order = ['/', '/work', '/tools', '/renew']
     const current = location.pathname
     const last = lastPathRef.current
   if (last === null) {

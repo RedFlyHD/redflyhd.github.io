@@ -104,6 +104,9 @@ export default function Navbar({ onOpenAbout, onOpenContact, onAnyNavClick }: { 
           <LinkNav to="/work" onAnyNavClick={onAnyNavClick}>
             Projets
           </LinkNav>
+          <LinkNav to="/tools" onAnyNavClick={onAnyNavClick}>
+            Outils
+          </LinkNav>
         </div>
 
         <div className="flex items-center gap-1 shrink-0">

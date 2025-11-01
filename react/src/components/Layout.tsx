@@ -1,7 +1,7 @@
 import { Outlet, useLocation } from 'react-router-dom'
 import Navbar from './Navbar'
 import Loader from './Loader'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, LayoutGroup, motion } from 'framer-motion'
 import { Suspense, useEffect, useRef, useState } from 'react'
 import { FaDiscord, FaInstagram, FaTwitter, FaYoutube, FaGithub, FaSpotify, FaTiktok, FaTwitch, FaXTwitter, FaFilePdf } from 'react-icons/fa6'
 import { HiOutlineEnvelope, HiOutlineExclamationTriangle, HiOutlineArrowDownTray, HiOutlineXMark } from 'react-icons/hi2'
@@ -11,6 +11,7 @@ import CustomCursor from './CustomCursor'
 import MobileNotice from './MobileNotice'
 import RouteProgress from './RouteProgress'
 import RouteSkeleton from './RouteSkeleton'
+import { ToolsOverlayProvider } from '../contexts/ToolsOverlayContext'
 const DISCORD_USERNAME = 'redflyhd' as const
 const LEGACY_VERSIONS = [{ label: 'Portfolio V3', href: '/V3' }] as const
 
@@ -99,7 +100,7 @@ export default function Layout() {
     }
   }
   return (
-    <div className="min-h-dvh bg-[#0a0a0a]">
+    <div className="min-h-dvh bg-[#0a0a0a] flex flex-col">
   <CustomCursor />
       <RouteProgress />
       <Loader />
@@ -121,15 +122,19 @@ export default function Layout() {
 
   <MobileNotice />
 
-      <AnimatePresence mode="wait">
-        <PageTransition>
-          <main className="mx-auto max-w-7xl px-4 py-8">
-            <Suspense fallback={<RouteSkeleton />}>
-              <Outlet />
-            </Suspense>
-          </main>
-        </PageTransition>
-      </AnimatePresence>
+      <div className="flex-1 flex flex-col">
+        <ToolsOverlayProvider>
+          <AnimatePresence mode="wait">
+            <PageTransition>
+              <main className="mx-auto max-w-7xl px-4 py-8 flex-1">
+                <Suspense fallback={<RouteSkeleton />}>
+                  <Outlet />
+                </Suspense>
+              </main>
+            </PageTransition>
+          </AnimatePresence>
+        </ToolsOverlayProvider>
+      </div>
 
       <footer className="border-t border-white/10">
         <div className="mx-auto max-w-7xl px-4 py-8">
@@ -248,7 +253,7 @@ export default function Layout() {
             <a href="https://www.youtube.com/@RedFlyHD" target="_blank" rel="noreferrer" className="hover:underline">
               @RedFlyHD
             </a>
-            <div className="mt-1 text-xs text-white/40">V4.2.5</div>
+            <div className="mt-1 text-xs text-white/40">V4.2.6</div>
           </div>
         </div>
       </footer>
@@ -773,5 +778,3 @@ export default function Layout() {
     </div>
   )
 }
-
-
