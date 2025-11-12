@@ -2,7 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-html, body, #root { height: 100%; }
+html, body, #root { 
+  height: 100%; 
+  font-family: 'IBM Plex Sans', system-ui, sans-serif;
+}
 body { @apply bg-neutral-950 text-neutral-100; }
 
 .fade-in { animation: fade-in 0.3s ease-in-out; }
