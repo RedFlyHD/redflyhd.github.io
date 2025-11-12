@@ -26,21 +26,48 @@ body { @apply bg-neutral-950 text-neutral-100; }
 	display: none; /* Chrome, Safari, Opera */
 }
 
+/* Masquer le curseur système - Méthode radicale pour Chromium macOS */
 @media (hover: hover) and (pointer: fine) {
-	html.custom-cursor-active body { cursor: none; }
+	html.custom-cursor-active,
+	html.custom-cursor-active *,
+	html.custom-cursor-active *::before,
+	html.custom-cursor-active *::after {
+		cursor: none !important;
+		-webkit-cursor: none !important;
+		-moz-cursor: none !important;
+	}
+	
+	/* Forcer spécifiquement sur les éléments problématiques */
+	html.custom-cursor-active body,
 	html.custom-cursor-active a,
+	html.custom-cursor-active a:hover,
 	html.custom-cursor-active button,
-	html.custom-cursor-active [role="button"],
+	html.custom-cursor-active button:hover,
 	html.custom-cursor-active input,
 	html.custom-cursor-active textarea,
 	html.custom-cursor-active select,
-	html.custom-cursor-active .cursor-pointer,
-	html.custom-cursor-active [data-cursor] {
-		cursor: none;
+	html.custom-cursor-active [role="button"],
+	html.custom-cursor-active [data-cursor],
+	html.custom-cursor-active .cursor-pointer {
+		cursor: none !important;
+		-webkit-cursor: none !important;
+		-moz-cursor: none !important;
 	}
 }
 
-.cursor-auto { cursor: auto !important; }
+/* Sur mobile et tablette, garder le curseur normal */
+@media (pointer: coarse) {
+	html.custom-cursor-active,
+	html.custom-cursor-active * {
+		cursor: auto !important;
+	}
+}
+
+/* Pour les cas où on veut forcer le curseur auto (override) */
+.cursor-auto,
+.cursor-auto * { 
+	cursor: auto !important; 
+}
 
 /* Skeleton shimmer */
 @keyframes skeleton-shimmer { to { transform: translateX(100%); } }
