@@ -65,15 +65,19 @@ export function ToolsOverlayProvider({ children }: { children: React.ReactNode }
               <div className="absolute inset-0 flex items-center justify-center p-4 sm:p-6">
                 <motion.div
                   layoutId={`card-${selected.id}`}
-                  className="relative w-full max-w-5xl overflow-hidden rounded-3xl border border-white/10 bg-neutral-900/90 p-0 text-left text-white shadow-2xl backdrop-blur flex max-h-[86dvh] flex-col"
-                  initial={{ opacity: 0, scale: 0.98 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.98 }}
-                  transition={{ type: 'spring', stiffness: 260, damping: 28 }}
+                  className="relative w-full max-w-5xl overflow-hidden rounded-2xl border border-white/20 bg-neutral-900/95 p-0 text-left text-white shadow-2xl shadow-black/50 backdrop-blur-xl flex max-h-[86dvh] flex-col"
+                  initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                  transition={{ type: 'spring', stiffness: 280, damping: 26 }}
                 >
+                  {/* Gradient accent */}
+                  <div className="pointer-events-none absolute inset-0 rounded-[1rem] [background:radial-gradient(ellipse_at_top_left,rgba(255,255,255,0.15),transparent_50%)]" />
+                  <div className="pointer-events-none absolute inset-0 rounded-[1rem] [background:radial-gradient(ellipse_at_bottom_right,rgba(255,255,255,0.08),transparent_50%)]" />
+                  
                   <button
                     onClick={close}
-                    className="absolute right-3 top-3 inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white/90 backdrop-blur-sm transition hover:bg-white/20 hover:text-white"
+                    className="absolute left-4 top-4 z-20 inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-black/40 text-white/90 backdrop-blur-md transition-all hover:scale-105 hover:border-white/20 hover:bg-black/60 hover:text-white active:scale-95"
                     aria-label="Fermer"
                   >
                     <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
@@ -85,8 +89,6 @@ export function ToolsOverlayProvider({ children }: { children: React.ReactNode }
                   ) : (
                     <DefaultLayout tool={selected} />
                   )}
-
-                  <div className="pointer-events-none absolute inset-0 rounded-[1.5rem] [background:radial-gradient(60%_60%_at_30%_10%,#ffffff12,transparent_60%)]" />
                 </motion.div>
               </div>
             </motion.div>
@@ -99,38 +101,96 @@ export function ToolsOverlayProvider({ children }: { children: React.ReactNode }
 
 function DefaultLayout({ tool }: { tool: Tool }) {
   return (
-    <div>
-      <div className="flex items-start gap-4 pr-10">
-        <div className="relative grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-2xl border border-white/10 bg-black/30">
-          <div className="absolute inset-0 [background:radial-gradient(60%_60%_at_30%_20%,#ffffff12,transparent_60%)]" />
-          {tool.icon ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={tool.icon} alt="icon" className="z-10 h-9 w-9 object-contain" />
-          ) : (
-            <div className="z-10 text-xl">🧰</div>
-          )}
-        </div>
-        <div>
-          <h3 className="text-lg font-semibold leading-tight">{tool.name}</h3>
-          <p className="text-sm text-white/60">{tool.category}</p>
-        </div>
-      </div>
-
-      <div className="mt-4 space-y-4">
-        <p className="text-sm text-white/80">{tool.description}</p>
-        {tool.tags && (
-          <div className="flex flex-wrap gap-1.5">
-            {tool.tags.map(tag => (
-              <span key={tag} className="rounded-full bg-white/10 px-2 py-0.5 text-[10px] text-white/70">{tag}</span>
-            ))}
+    <div className="flex-1 overflow-y-auto">
+      <div className="relative p-6 sm:p-8">
+        {/* Gradient background decoration */}
+        <div className="pointer-events-none absolute inset-0 [background:radial-gradient(ellipse_at_top_right,rgba(255,255,255,0.08),transparent_50%)]" />
+        
+        <div className="relative flex items-start gap-5 pb-6">
+          <motion.div 
+            className="relative grid h-20 w-20 shrink-0 place-items-center overflow-hidden rounded-2xl border border-white/20 bg-gradient-to-br from-white/10 to-white/5 shadow-lg"
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+          >
+            <div className="absolute inset-0 [background:radial-gradient(60%_60%_at_30%_20%,#ffffff22,transparent_70%)]" />
+            <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-black/20" />
+            {tool.icon ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={tool.icon} alt="icon" className="z-10 h-12 w-12 object-contain drop-shadow-lg" />
+            ) : (
+              <div className="z-10 text-3xl">🧰</div>
+            )}
+          </motion.div>
+          <div className="flex-1 pt-1">
+            <motion.h3 
+              className="text-2xl font-bold leading-tight tracking-tight"
+              initial={{ y: 10, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.1 }}
+            >
+              {tool.name}
+            </motion.h3>
+            <motion.p 
+              className="mt-1 inline-block rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-white/80 backdrop-blur-sm"
+              initial={{ y: 10, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.15 }}
+            >
+              {tool.category}
+            </motion.p>
           </div>
-        )}
-        {tool.href && (
-          <a href={tool.href} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-black shadow transition hover:shadow-md">
-            Ouvrir
-            <HiMiniArrowTopRightOnSquare className="h-4 w-4" />
-          </a>
-        )}
+        </div>
+
+        <motion.div 
+          className="relative space-y-6"
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.2 }}
+        >
+          <div className="rounded-xl border border-white/10 bg-gradient-to-br from-white/5 to-transparent p-5 backdrop-blur-sm">
+            <p className="text-base leading-relaxed text-white/90">{tool.description}</p>
+          </div>
+          
+          {tool.tags && tool.tags.length > 0 && (
+            <div>
+              <h4 className="mb-3 text-xs font-semibold uppercase tracking-wider text-white/60">Technologies</h4>
+              <div className="flex flex-wrap gap-2">
+                {tool.tags.map((tag, i) => (
+                  <motion.span 
+                    key={tag}
+                    className="group relative overflow-hidden rounded-lg border border-white/10 bg-gradient-to-br from-white/10 to-white/5 px-3 py-1.5 text-xs font-medium text-white/90 backdrop-blur-sm transition-all hover:border-white/20 hover:from-white/15 hover:to-white/10"
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ delay: 0.3 + i * 0.05 }}
+                  >
+                    <span className="relative z-10">{tag}</span>
+                    <div className="absolute inset-0 -z-0 translate-y-full bg-gradient-to-t from-white/10 to-transparent transition-transform group-hover:translate-y-0" />
+                  </motion.span>
+                ))}
+              </div>
+            </div>
+          )}
+          
+          {tool.href && (
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.35, type: 'spring', stiffness: 300, damping: 20 }}
+            >
+              <a 
+                href={tool.href} 
+                target="_blank" 
+                rel="noreferrer" 
+                className="group relative inline-flex items-center gap-2 overflow-hidden rounded-xl bg-gradient-to-r from-white to-white/95 px-6 py-3 text-sm font-bold text-black shadow-lg shadow-white/25 transition-all hover:scale-105 hover:shadow-xl hover:shadow-white/30"
+              >
+                <span className="relative z-10">Ouvrir l'outil</span>
+                <HiMiniArrowTopRightOnSquare className="relative z-10 h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                <div className="absolute inset-0 -z-0 bg-gradient-to-r from-white/0 via-white/50 to-white/0 opacity-0 transition-opacity group-hover:opacity-100" />
+              </a>
+            </motion.div>
+          )}
+        </motion.div>
       </div>
     </div>
   )
@@ -186,108 +246,246 @@ function AppStoreLayout({ tool }: { tool: Tool }) {
 
   return (
     <div className="flex-1 overflow-y-auto">
-      <div className="sticky top-0 z-10 border-b border-white/10 bg-neutral-900/90 p-4 sm:p-6 backdrop-blur">
-        <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-3">
-            <div className="relative grid h-16 w-16 place-items-center overflow-hidden rounded-2xl border border-white/10 bg-black/30">
-              <div className="absolute inset-0 [background:radial-gradient(60%_60%_at_30%_20%,#ffffff12,transparent_60%)]" />
+      <div className="sticky top-0 z-10 border-b border-white/10 bg-gradient-to-b from-neutral-900/95 to-neutral-900/90 p-5 sm:p-7 backdrop-blur-xl">
+        <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-4">
+            <motion.div 
+              className="relative grid h-20 w-20 place-items-center overflow-hidden rounded-2xl border border-white/20 bg-gradient-to-br from-white/10 to-white/5 shadow-lg"
+              initial={{ scale: 0.8, rotate: -5 }}
+              animate={{ scale: 1, rotate: 0 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+            >
+              <div className="absolute inset-0 [background:radial-gradient(60%_60%_at_30%_20%,#ffffff25,transparent_70%)]" />
+              <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-black/20" />
               {tool.icon ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={tool.icon} alt="icon" className="z-10 h-10 w-10 object-contain" />
+                <img src={tool.icon} alt="icon" className="z-10 h-12 w-12 object-contain drop-shadow-lg" />
               ) : (
-                <div className="z-10 text-xl">🧰</div>
+                <div className="z-10 text-2xl">🧰</div>
+              )}
+            </motion.div>
+            <div>
+              <motion.h2 
+                className="text-2xl font-bold leading-tight tracking-tight sm:text-3xl"
+                initial={{ y: 10, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.1 }}
+              >
+                {tool.name}
+              </motion.h2>
+              {tool.subtitle && (
+                <motion.p 
+                  className="mt-1 text-sm text-white/70"
+                  initial={{ y: 10, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.15 }}
+                >
+                  {tool.subtitle}
+                </motion.p>
               )}
             </div>
-            <div>
-              <h2 className="text-2xl font-semibold leading-tight">{tool.name}</h2>
-              {tool.subtitle && <p className="text-sm text-white/60">{tool.subtitle}</p>}
-            </div>
           </div>
-          <div className="flex items-center gap-2">
-            {tool.href && (
+          {tool.href && (
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.2 }}
+            >
               <a
                 href={tool.href}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center justify-center rounded-full bg-white px-5 py-2 text-sm font-semibold text-black shadow transition hover:shadow-md"
+                className="group inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-white to-white/95 px-5 py-2.5 text-sm font-bold text-black shadow-lg shadow-white/25 transition-all hover:scale-105 hover:shadow-xl hover:shadow-white/30 active:scale-95"
               >
                 Ouvrir
+                <HiMiniArrowTopRightOnSquare className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </a>
-            )}
-            <button
-              onClick={() => { (document.activeElement as HTMLElement | null)?.blur?.(); overlay?.close?.() }}
-              className="inline-flex items-center justify-center rounded-full border border-white/20 bg-white/5 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10"
-            >
-              Fermer
-            </button>
-          </div>
+            </motion.div>
+          )}
         </div>
         {tool.shortDescription && (
-          <p className="mt-3 text-[15px] text-white/80">{tool.shortDescription}</p>
+          <motion.p 
+            className="mt-4 rounded-lg border border-white/10 bg-white/5 p-3 text-[15px] leading-relaxed text-white/90 backdrop-blur-sm"
+            initial={{ y: 10, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.25 }}
+          >
+            {tool.shortDescription}
+          </motion.p>
         )}
       </div>
 
-      <div className="space-y-8 p-4 sm:p-6">
-        <div ref={scrollRef} className="-mx-2 overflow-x-auto px-2 pb-2 no-scrollbar">
-          <div className="flex snap-x snap-mandatory gap-4">
-            {list.map((src, i) => (
-              <div data-item key={src + i} className="snap-start shrink-0 w-[90vw] sm:w-[80vw] md:w-[68vw] lg:w-[980px]">
-                <div className="overflow-hidden rounded-3xl border border-white/10 bg-white/5 shadow-inner">
-                  <img src={src} loading="lazy" className="h-[56vw] max-h-[520px] w-full object-cover sm:h-[48vw] md:h-[40vw] lg:h-[520px]" alt="Capture d’écran" />
-                </div>
+            <div className="space-y-8 p-5 sm:p-7">
+        <div>
+          <h3 className="mb-4 text-xs font-semibold uppercase tracking-wider text-white/60">Aperçu</h3>
+          <div ref={scrollRef} className="-mx-2 overflow-x-auto px-2 pb-3 no-scrollbar">
+            <div className="flex snap-x snap-mandatory gap-4">
+              {list.map((src, i) => (
+                <motion.div 
+                  data-item 
+                  key={src + i} 
+                  className="snap-start shrink-0 w-[90vw] sm:w-[80vw] md:w-[68vw] lg:w-[980px]"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: i * 0.05 }}
+                >
+                  <div className="group relative overflow-hidden rounded-2xl border border-white/20 bg-gradient-to-br from-white/10 to-white/5 shadow-xl shadow-black/20 transition-all hover:border-white/30 hover:shadow-2xl hover:shadow-black/30">
+                    <div className="absolute inset-0 -z-0 bg-gradient-to-br from-white/5 via-transparent to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+                    <img src={src} loading="lazy" className="h-[56vw] max-h-[520px] w-full object-cover sm:h-[48vw] md:h-[40vw] lg:h-[520px]" alt="Capture d'écran" />
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h3 className="mb-4 text-xs font-semibold uppercase tracking-wider text-white/60">Fonctionnalités</h3>
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+            <motion.div 
+              className="group relative overflow-hidden rounded-xl border border-white/10 bg-gradient-to-br from-white/[0.08] to-white/[0.03] p-5 backdrop-blur-sm transition-all hover:border-white/20 hover:from-white/[0.12] hover:to-white/[0.05]"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+            >
+              <div className="absolute inset-0 -z-0 bg-gradient-to-br from-white/5 via-transparent to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+              <div className="mb-2 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-white/10">
+                <span className="text-lg">✨</span>
               </div>
-            ))}
+              <h4 className="mb-2 font-bold">Interface intuitive</h4>
+              <ul className="space-y-1.5 text-sm text-white/80">
+                <li className="flex items-start gap-2">
+                  <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-white/60" />
+                  <span>Swipe gauche/droite ou clavier</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-white/60" />
+                  <span>Design moderne, mode sombre</span>
+                </li>
+              </ul>
+            </motion.div>
+            <motion.div 
+              className="group relative overflow-hidden rounded-xl border border-white/10 bg-gradient-to-br from-white/[0.08] to-white/[0.03] p-5 backdrop-blur-sm transition-all hover:border-white/20 hover:from-white/[0.12] hover:to-white/[0.05]"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.35 }}
+            >
+              <div className="absolute inset-0 -z-0 bg-gradient-to-br from-white/5 via-transparent to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+              <div className="mb-2 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-white/10">
+                <span className="text-lg">🧠</span>
+              </div>
+              <h4 className="mb-2 font-bold">Apprentissage intelligent</h4>
+              <ul className="space-y-1.5 text-sm text-white/80">
+                <li className="flex items-start gap-2">
+                  <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-white/60" />
+                  <span>SRS adaptatif</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-white/60" />
+                  <span>Progression personnalisée</span>
+                </li>
+              </ul>
+            </motion.div>
+            <motion.div 
+              className="group relative overflow-hidden rounded-xl border border-white/10 bg-gradient-to-br from-white/[0.08] to-white/[0.03] p-5 backdrop-blur-sm transition-all hover:border-white/20 hover:from-white/[0.12] hover:to-white/[0.05]"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+            >
+              <div className="absolute inset-0 -z-0 bg-gradient-to-br from-white/5 via-transparent to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+              <div className="mb-2 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-white/10">
+                <span className="text-lg">📝</span>
+              </div>
+              <h4 className="mb-2 font-bold">Mode Examen</h4>
+              <ul className="space-y-1.5 text-sm text-white/80">
+                <li className="flex items-start gap-2">
+                  <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-white/60" />
+                  <span>40 questions, chronomètre</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-white/60" />
+                  <span>Correction détaillée</span>
+                </li>
+              </ul>
+            </motion.div>
+            <motion.div 
+              className="group relative overflow-hidden rounded-xl border border-white/10 bg-gradient-to-br from-white/[0.08] to-white/[0.03] p-5 backdrop-blur-sm transition-all hover:border-white/20 hover:from-white/[0.12] hover:to-white/[0.05]"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.45 }}
+            >
+              <div className="absolute inset-0 -z-0 bg-gradient-to-br from-white/5 via-transparent to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+              <div className="mb-2 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-white/10">
+                <span className="text-lg">📊</span>
+              </div>
+              <h4 className="mb-2 font-bold">Statistiques</h4>
+              <ul className="space-y-1.5 text-sm text-white/80">
+                <li className="flex items-start gap-2">
+                  <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-white/60" />
+                  <span>Maîtrise globale et par thème</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-white/60" />
+                  <span>Niveaux, XP, badges, streak 🔥</span>
+                </li>
+              </ul>
+            </motion.div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-            <h3 className="font-semibold">Interface intuitive</h3>
-            <ul className="ml-5 mt-2 list-disc space-y-1 text-sm text-white/80">
-              <li>Swipe gauche/droite ou clavier</li>
-              <li>Design moderne, mode sombre</li>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <motion.div 
+            className="relative overflow-hidden rounded-xl border border-white/20 bg-gradient-to-br from-green-500/10 via-white/5 to-transparent p-5 backdrop-blur-sm"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.5 }}
+          >
+            <div className="absolute inset-0 -z-0 [background:radial-gradient(ellipse_at_top_left,rgba(34,197,94,0.1),transparent_60%)]" />
+            <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-green-500/20">
+              <span className="text-lg">💎</span>
+            </div>
+            <h4 className="mb-3 text-lg font-bold">Avantages</h4>
+            <ul className="space-y-2 text-sm text-white/90">
+              <li className="flex items-start gap-2">
+                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-green-400" />
+                <span>100% gratuit, sans publicité</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-green-400" />
+                <span>Hors‑ligne (PWA), respect de la vie privée</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-green-400" />
+                <span>Accessibilité soignée</span>
+              </li>
             </ul>
-          </div>
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-            <h3 className="font-semibold">Apprentissage intelligent</h3>
-            <ul className="ml-5 mt-2 list-disc space-y-1 text-sm text-white/80">
-              <li>SRS adaptatif</li>
-              <li>Progression personnalisée</li>
+          </motion.div>
+          <motion.div 
+            className="relative overflow-hidden rounded-xl border border-white/20 bg-gradient-to-br from-blue-500/10 via-white/5 to-transparent p-5 backdrop-blur-sm"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.55 }}
+          >
+            <div className="absolute inset-0 -z-0 [background:radial-gradient(ellipse_at_top_right,rgba(59,130,246,0.1),transparent_60%)]" />
+            <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-blue-500/20">
+              <span className="text-lg">⚙️</span>
+            </div>
+            <h4 className="mb-3 text-lg font-bold">Technique</h4>
+            <ul className="space-y-2 text-sm text-white/90">
+              <li className="flex items-start gap-2">
+                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-blue-400" />
+                <span>React 18 + TS, Vite, Tailwind, Router v6</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-blue-400" />
+                <span>LocalStorage versionné, SRS custom</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-blue-400" />
+                <span>PWA (manifest, SW, cache)</span>
+              </li>
             </ul>
-          </div>
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-            <h3 className="font-semibold">Mode Examen</h3>
-            <ul className="ml-5 mt-2 list-disc space-y-1 text-sm text-white/80">
-              <li>40 questions, chronomètre</li>
-              <li>Correction détaillée</li>
-            </ul>
-          </div>
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-            <h3 className="font-semibold">Statistiques</h3>
-            <ul className="ml-5 mt-2 list-disc space-y-1 text-sm text-white/80">
-              <li>Maîtrise globale et par thème</li>
-              <li>Niveaux, XP, badges, streak 🔥</li>
-            </ul>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-white/80">
-            <h3 className="font-semibold">Avantages</h3>
-            <ul className="ml-5 mt-2 list-disc space-y-1">
-              <li>100% gratuit, sans publicité</li>
-              <li>Hors‑ligne (PWA), respect de la vie privée</li>
-              <li>Accessibilité soignée</li>
-            </ul>
-          </div>
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-white/80">
-            <h3 className="font-semibold">Technique</h3>
-            <ul className="ml-5 mt-2 list-disc space-y-1">
-              <li>React 18 + TS, Vite, Tailwind, Router v6</li>
-              <li>LocalStorage versionné, SRS custom</li>
-              <li>PWA (manifest, SW, cache)</li>
-            </ul>
-          </div>
+          </motion.div>
         </div>
       </div>
     </div>

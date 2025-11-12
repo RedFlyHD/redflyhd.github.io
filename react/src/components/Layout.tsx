@@ -15,6 +15,457 @@ import { ToolsOverlayProvider } from '../contexts/ToolsOverlayContext'
 const DISCORD_USERNAME = 'redflyhd' as const
 const LEGACY_VERSIONS = [{ label: 'Portfolio V3', href: '/V3' }] as const
 
+// Types pour les countdowns
+interface CountdownItem {
+  emoji: string
+  title: string
+  deadline: number // Unix timestamp
+  color: string
+  gradient: string
+}
+
+// Composant pour un item de countdown individuel
+function CountdownCard({ item }: { item: CountdownItem }) {
+  const cardRef = useRef<HTMLDivElement>(null)
+  const rafId = useRef<number | null>(null)
+  const [timeLeft, setTimeLeft] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+    isExpired: false,
+  })
+
+  useEffect(() => {
+    const calculateTimeLeft = () => {
+      const now = Math.floor(Date.now() / 1000)
+      const difference = item.deadline - now
+
+      if (difference <= 0) {
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0, isExpired: true })
+        return
+      }
+
+      const days = Math.floor(difference / 86400)
+      const hours = Math.floor((difference % 86400) / 3600)
+      const minutes = Math.floor((difference % 3600) / 60)
+      const seconds = difference % 60
+
+      setTimeLeft({ days, hours, minutes, seconds, isExpired: false })
+    }
+
+    calculateTimeLeft()
+    const interval = setInterval(calculateTimeLeft, 1000)
+    return () => clearInterval(interval)
+  }, [item.deadline])
+
+  // Effet de souris optimisé avec RAF
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (rafId.current) return
+    rafId.current = requestAnimationFrame(() => {
+      const card = cardRef.current
+      if (!card) {
+        rafId.current = null
+        return
+      }
+      const rect = card.getBoundingClientRect()
+      const x = e.clientX - rect.left
+      const y = e.clientY - rect.top
+      card.style.setProperty('--mouse-x', `${x}px`)
+      card.style.setProperty('--mouse-y', `${y}px`)
+      rafId.current = null
+    })
+  }
+
+  const date = new Date(item.deadline * 1000)
+  const formattedDate = date.toLocaleDateString('fr-FR', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  })
+
+  return (
+    <motion.div
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      initial={{ opacity: 0, y: 12, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ 
+        type: 'spring',
+        stiffness: 300,
+        damping: 25,
+        mass: 0.8,
+      }}
+      whileHover={{
+        y: -6,
+        scale: 1.01,
+        transition: {
+          type: 'spring',
+          stiffness: 400,
+          damping: 20,
+        }
+      }}
+      className="group relative overflow-hidden rounded-xl border border-white/10 bg-gradient-to-br from-white/[0.08] to-white/[0.02] backdrop-blur-sm transition-all duration-500 hover:border-white/25 hover:shadow-[0_12px_40px_-12px_rgba(255,255,255,0.15)]"
+      style={{ willChange: 'transform' }}
+    >
+      {/* Texture de grain subtile */}
+      <div className="pointer-events-none absolute inset-0 opacity-[0.015] mix-blend-overlay">
+        <div className="h-full w-full" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 400 400\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noiseFilter\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noiseFilter)\'/%3E%3C/svg%3E")', backgroundRepeat: 'repeat' }} />
+      </div>
+
+      {/* Gradient animé au hover - optimisé */}
+      <div className="pointer-events-none absolute -inset-10 opacity-0 transition-opacity duration-700 ease-out group-hover:opacity-40" style={{ willChange: 'opacity' }}>
+        <div className={`absolute inset-0 ${item.gradient} blur-3xl`} />
+      </div>
+
+      {/* Effet de brillance interactive */}
+      <div 
+        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        style={{
+          background: 'radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255,255,255,0.08), transparent 40%)',
+          willChange: 'opacity',
+        }}
+      />
+
+      <div className="relative p-5 sm:p-6">
+        {/* Header avec emoji et titre */}
+        <div className="mb-5 flex items-start gap-3">
+          <motion.div
+            className="flex h-12 w-12 shrink-0 cursor-pointer items-center justify-center rounded-lg bg-gradient-to-br from-white/10 to-white/5 text-2xl shadow-inner ring-1 ring-white/10 backdrop-blur-sm"
+            whileHover={{ 
+              scale: 1.2,
+              rotate: [0, -10, 10, -10, 0],
+              transition: { 
+                type: 'spring',
+                stiffness: 500,
+                damping: 10,
+                rotate: {
+                  repeat: Infinity,
+                  duration: 0.5,
+                }
+              }
+            }}
+            whileTap={{ 
+              scale: 0.85,
+              rotate: 0,
+              transition: { 
+                type: 'spring',
+                stiffness: 600,
+                damping: 15 
+              }
+            }}
+            animate={{
+              y: [0, -2, 0],
+              transition: {
+                duration: 2,
+                repeat: Infinity,
+                ease: 'easeInOut',
+              }
+            }}
+          >
+            {item.emoji}
+          </motion.div>
+          <div className="min-w-0 flex-1">
+            <h4 className="text-base font-bold leading-tight tracking-tight text-white transition-colors group-hover:text-white/95 sm:text-lg">{item.title}</h4>
+            <p className="mt-1.5 text-xs text-white/60 transition-colors group-hover:text-white/70 sm:text-sm">{formattedDate}</p>
+          </div>
+        </div>
+
+        {/* Countdown timer */}
+        {!timeLeft.isExpired ? (
+          <div className="grid grid-cols-4 gap-2.5">
+            {[
+              { value: timeLeft.days, label: 'Jours' },
+              { value: timeLeft.hours, label: 'Heures' },
+              { value: timeLeft.minutes, label: 'Min' },
+              { value: timeLeft.seconds, label: 'Sec' },
+            ].map((unit, idx) => (
+              <motion.div 
+                key={idx} 
+                className="group/unit flex flex-col items-center rounded-lg bg-gradient-to-br from-white/[0.12] to-white/[0.04] p-2.5 shadow-inner ring-1 ring-white/10 backdrop-blur-sm transition-all duration-300"
+                whileHover={{ 
+                  scale: 1.08,
+                  y: -4,
+                  transition: { 
+                    type: 'spring', 
+                    stiffness: 400, 
+                    damping: 15 
+                  }
+                }}
+                whileTap={{ 
+                  scale: 0.95,
+                  transition: { 
+                    type: 'spring', 
+                    stiffness: 600, 
+                    damping: 20 
+                  }
+                }}
+              >
+                <div className="relative h-9 sm:h-11 w-full flex items-center justify-center overflow-hidden px-1" style={{ perspective: '1000px' }}>
+                  <AnimatePresence mode="popLayout">
+                    <motion.div
+                      key={unit.value}
+                      initial={{ 
+                        y: 30,
+                        opacity: 0,
+                        scale: 0.7,
+                        rotateX: 60,
+                        filter: 'blur(8px)',
+                      }}
+                      animate={{ 
+                        y: 0,
+                        opacity: 1,
+                        scale: 1,
+                        rotateX: 0,
+                        filter: 'blur(0px)',
+                      }}
+                      exit={{ 
+                        y: -30,
+                        opacity: 0,
+                        scale: 0.7,
+                        rotateX: -60,
+                        filter: 'blur(8px)',
+                      }}
+                      transition={{ 
+                        type: 'spring',
+                        stiffness: 400,
+                        damping: 25,
+                        mass: 0.7,
+                        filter: {
+                          duration: 0.2,
+                        }
+                      }}
+                      className={`text-xl font-black tabular-nums ${item.color} transition-all duration-300 group-hover/unit:scale-110 sm:text-2xl drop-shadow-lg`}
+                      style={{ 
+                        backfaceVisibility: 'hidden',
+                        transformStyle: 'preserve-3d',
+                        willChange: 'transform, filter, opacity',
+                      }}
+                    >
+                      {String(unit.value).padStart(2, '0')}
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
+                <div className="mt-1 text-[10px] font-bold uppercase tracking-wider text-white/50 transition-colors group-hover/unit:text-white/70 sm:text-xs">
+                  {unit.label}
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        ) : (
+          <motion.div 
+            className="flex items-center justify-center gap-2 rounded-lg bg-gradient-to-br from-green-500/10 to-emerald-500/5 p-5 ring-1 ring-green-400/20"
+            initial={{ scale: 0, opacity: 0, rotate: -180 }}
+            animate={{ 
+              scale: 1, 
+              opacity: 1, 
+              rotate: 0,
+              transition: {
+                type: 'spring',
+                stiffness: 300,
+                damping: 15,
+                mass: 0.8,
+              }
+            }}
+            whileHover={{ 
+              scale: 1.05,
+              rotate: [0, -5, 5, -5, 0],
+              transition: { 
+                type: 'spring',
+                stiffness: 400,
+                damping: 10,
+                rotate: {
+                  duration: 0.5,
+                }
+              }
+            }}
+            whileTap={{ 
+              scale: 0.95,
+              transition: {
+                type: 'spring',
+                stiffness: 600,
+                damping: 15,
+              }
+            }}
+          >
+            <motion.span 
+              className="text-xl"
+              animate={{
+                rotate: [0, 10, -10, 10, 0],
+                scale: [1, 1.1, 1],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: 'easeInOut',
+              }}
+            >
+              ✅
+            </motion.span>
+            <span className="text-sm font-semibold text-green-400">Terminé</span>
+          </motion.div>
+        )}
+      </div>
+    </motion.div>
+  )
+}
+
+// Section principale Countdown
+function CountdownSection() {
+  const countdowns: CountdownItem[] = [
+    {
+      emoji: '🔥',
+      title: 'Reveal Divizion Launcher',
+      deadline: 1764954000,
+      color: 'text-red-400',
+      gradient: 'bg-gradient-to-br from-red-500/20 to-orange-500/20',
+    },
+    {
+      emoji: '🎨',
+      title: '3D — 1 mois pour devenir le king',
+      deadline: 1765407540,
+      color: 'text-purple-400',
+      gradient: 'bg-gradient-to-br from-purple-500/20 to-pink-500/20',
+    },
+    {
+      emoji: '🎥',
+      title: 'Finir la vidéo de reveal du nouveau portfolio',
+      deadline: 1766617140,
+      color: 'text-blue-400',
+      gradient: 'bg-gradient-to-br from-blue-500/20 to-cyan-500/20',
+    },
+    {
+      emoji: '🎭',
+      title: 'DA + reveal de VHR (mi-janvier)',
+      deadline: 1768517940,
+      color: 'text-emerald-400',
+      gradient: 'bg-gradient-to-br from-emerald-500/20 to-teal-500/20',
+    },
+    {
+      emoji: '🎬',
+      title: 'VHR — première courte vidéo (5–10 min) en mars 2026',
+      deadline: 1773594000,
+      color: 'text-amber-400',
+      gradient: 'bg-gradient-to-br from-amber-500/20 to-yellow-500/20',
+    },
+    {
+      emoji: '🚀',
+      title: 'VHR — grosse vidéo en juin 2026',
+      deadline: 1781539200,
+      color: 'text-indigo-400',
+      gradient: 'bg-gradient-to-br from-indigo-500/20 to-violet-500/20',
+    },
+    {
+      emoji: '🎯',
+      title: 'Objectif : 100k vues YouTube avant mes 18 ans (pas une vidéo shitpost easy)',
+      deadline: 1796511540,
+      color: 'text-rose-400',
+      gradient: 'bg-gradient-to-br from-rose-500/20 to-pink-500/20',
+    },
+  ]
+
+  return (
+    <div className="relative m-4 overflow-hidden rounded-xl border border-white/10 bg-gradient-to-br from-white/[0.05] to-white/[0.02] shadow-xl shadow-black/20 backdrop-blur-sm sm:m-6">
+      {/* Texture de grain */}
+      <div className="pointer-events-none absolute inset-0 opacity-[0.02] mix-blend-overlay">
+        <div className="h-full w-full" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 400 400\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noiseFilter\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noiseFilter)\'/%3E%3C/svg%3E")', backgroundRepeat: 'repeat' }} />
+      </div>
+      
+      {/* Effets de fond animés optimisés */}
+      <div className="pointer-events-none absolute -inset-20 blur-3xl opacity-40">
+        <motion.div
+          className="absolute left-10 top-0 h-56 w-56 rounded-full bg-violet-500/40"
+          animate={{
+            x: [0, 25, 0],
+            y: [0, -20, 0],
+            scale: [1, 1.15, 1],
+          }}
+          transition={{
+            duration: 12,
+            repeat: Infinity,
+            ease: 'easeInOut',
+          }}
+          style={{ willChange: 'transform' }}
+        />
+        <motion.div
+          className="absolute right-10 top-10 h-56 w-56 rounded-full bg-blue-500/40"
+          animate={{
+            x: [0, -20, 0],
+            y: [0, 20, 0],
+            scale: [1, 1.2, 1],
+          }}
+          transition={{
+            duration: 15,
+            repeat: Infinity,
+            ease: 'easeInOut',
+          }}
+          style={{ willChange: 'transform' }}
+        />
+        <motion.div
+          className="absolute left-1/2 bottom-0 h-56 w-56 -translate-x-1/2 rounded-full bg-pink-500/30"
+          animate={{
+            x: [-50, 50, -50],
+            scale: [1, 1.1, 1],
+          }}
+          transition={{
+            duration: 18,
+            repeat: Infinity,
+            ease: 'easeInOut',
+          }}
+          style={{ willChange: 'transform' }}
+        />
+      </div>
+
+      <div className="relative p-5 sm:p-7">
+        {/* Header avec animation améliorée */}
+        <motion.div
+          initial={{ opacity: 0, y: -15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className="mb-6 sm:mb-7"
+        >
+          <div className="flex items-center gap-3 sm:gap-4">
+            <motion.div
+              animate={{
+                rotate: [0, 8, -8, 0],
+                scale: [1, 1.05, 1],
+              }}
+              transition={{
+                duration: 2.5,
+                repeat: Infinity,
+                ease: 'easeInOut',
+              }}
+              whileHover={{ scale: 1.15, rotate: 15 }}
+              className="flex h-14 w-14 shrink-0 cursor-pointer items-center justify-center rounded-xl bg-gradient-to-br from-white/10 to-white/5 text-3xl shadow-lg ring-1 ring-white/10 backdrop-blur-sm transition-all hover:ring-white/20 sm:h-16 sm:w-16 sm:text-4xl"
+            >
+              ⏰
+            </motion.div>
+            <div>
+              <h3 className="text-2xl font-black tracking-tight sm:text-3xl">Mes Objectifs</h3>
+              <p className="mt-1 text-sm text-white/60">Deadlines et projets en cours</p>
+            </div>
+          </div>
+          <motion.p 
+            className="mt-4 rounded-lg border border-white/10 bg-gradient-to-br from-white/5 to-transparent p-4 text-sm leading-relaxed text-white/80 backdrop-blur-sm transition-all duration-300 hover:border-white/20 hover:from-white/[0.07]"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.5 }}
+          >
+            Voici mes deadlines et objectifs pour les prochains mois. Je travaille dur pour transformer mes idées en réalité et créer du contenu de qualité.
+          </motion.p>
+        </motion.div>
+
+        {/* Grille de countdowns */}
+        <div className="grid gap-4 sm:gap-5">
+          {countdowns.map((countdown, index) => (
+            <CountdownCard key={index} item={countdown} />
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function Layout() {
   const location = useLocation()
   const [aboutOpen, setAboutOpen] = useState(false)
@@ -253,7 +704,7 @@ export default function Layout() {
             <a href="https://www.youtube.com/@RedFlyHD" target="_blank" rel="noreferrer" className="hover:underline">
               @RedFlyHD
             </a>
-            <div className="mt-1 text-xs text-white/40">V4.2.7</div>
+            <div className="mt-1 text-xs text-white/40">V4.3.0</div>
           </div>
         </div>
       </footer>
@@ -279,8 +730,13 @@ export default function Layout() {
                     <div className="h-48 w-full overflow-hidden rounded-xl border border-white/10 sm:h-[200px]">
                       <img src="/rss/IRL.jpg" alt="Portrait" className="h-full w-full object-cover" />
                     </div>
-                    <div className="mt-3">
-                      <button
+                    <motion.div 
+                      className="mt-4"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.15, duration: 0.4 }}
+                    >
+                      <motion.button
                         onClick={() => {
                           // Flow: close About, open confirmation
                           setAboutOpen(false)
@@ -288,12 +744,18 @@ export default function Layout() {
                           setShouldReopenAbout(true)
                           setConfirmBrochureOpen(true)
                         }}
-                        className="flex w-full items-center justify-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-black shadow-sm transition hover:bg-white/90"
+                        className="group relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-lg bg-gradient-to-r from-white to-white/95 px-5 py-3 text-sm font-bold text-black shadow-lg shadow-white/20 transition-all duration-300 hover:shadow-xl hover:shadow-white/30"
+                        whileHover={{ scale: 1.02, y: -2 }}
+                        whileTap={{ scale: 0.98 }}
                       >
-                        <FaFilePdf className="h-4 w-4" aria-hidden />
-                        <span>Télécharger la brochure</span>
-                      </button>
-                    </div>
+                        <FaFilePdf className="relative z-10 h-4 w-4 transition-all duration-300 group-hover:scale-125 group-hover:-rotate-12" aria-hidden />
+                        <span className="relative z-10">Télécharger la brochure</span>
+                        <svg className="relative z-10 ml-1 h-4 w-4 opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100 -translate-x-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
+                        <div className="absolute inset-0 -z-0 bg-gradient-to-r from-white/0 via-white/50 to-white/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                      </motion.button>
+                    </motion.div>
                   </div>
                   <div className="relative z-10 min-w-0 space-y-3">
                     <div>
@@ -301,40 +763,80 @@ export default function Layout() {
                       <p className="text-sm text-white/60">France • Créateur Numérique</p>
                     </div>
                     <div className="space-y-3 text-sm leading-relaxed text-white/80">
-                      <p>✨ Salut, moi c'est Maxence. Passionné par la création numérique, je touche à tout : motion design, 2D/3D, dev web, montage vidéo… J'adore imaginer des identités visuelles marquantes et des concepts interactifs qui sortent un peu de l'ordinaire.</p>
-                      
-                      <p>🎨 Je bosse en autodidacte depuis plusieurs années, en testant, en apprenant, et en partageant mes idées sur YouTube, TikTok et Insta (même si YouTube reste ma plateforme de cœur). J'aime aussi expérimenter sur After Effects, que ce soit pour des animations originales, ou pour donner vie à des univers plus créatifs.</p>
-                      
-                      <p>🚀 En 2025, mon objectif est de sortir des vidéos plus travaillées sur YouTube, pousser mes projets 2D/3D encore plus loin.</p>
+                    <p>✨ Salut, moi c’est Maxence. Je suis passionné par la création numérique sous toutes ses formes : motion design, 2D/3D, web, montage vidéo… J’aime imaginer des univers visuels uniques, des identités marquantes et des concepts interactifs qui sortent un peu des sentiers battus.</p>
+
+                    <p>🎨 Je me forme en autodidacte depuis plusieurs années, en testant, en apprenant et en partageant mes projets sur YouTube, TikTok et Instagram — même si YouTube reste clairement ma plateforme préférée. J’adore passer des heures sur After Effects à donner vie à mes idées ou à créer des animations qui sortent de l’ordinaire.</p>
+
+                    <p>🚀 En 2026, je veux aller encore plus loin : sortir des vidéos plus abouties, expérimenter davantage en 3D et continuer à faire évoluer mes projets.</p>
                     </div>
                   </div>
                 </div>
 
                 {/* Section RedFly avec bannière */}
-                <div className="relative m-4 overflow-hidden rounded-xl border border-white/10 bg-white/[0.03] sm:m-6">
-                  <div className="pointer-events-none absolute -inset-16 blur-2xl opacity-40">
-                    <div className="absolute left-10 top-0 h-40 w-40 rounded-full bg-violet-500/30" />
-                    <div className="absolute right-10 top-10 h-40 w-40 rounded-full bg-indigo-500/30" />
+                <motion.div 
+                  className="group/redfly relative m-4 overflow-hidden rounded-xl border border-white/10 bg-gradient-to-br from-white/[0.05] to-white/[0.02] shadow-xl shadow-black/20 backdrop-blur-sm transition-all duration-500 hover:border-white/20 hover:shadow-2xl sm:m-6"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2, duration: 0.5 }}
+                >
+                  {/* Texture */}
+                  <div className="pointer-events-none absolute inset-0 opacity-[0.015] mix-blend-overlay">
+                    <div className="h-full w-full" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 400 400\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noiseFilter\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noiseFilter)\'/%3E%3C/svg%3E")', backgroundRepeat: 'repeat' }} />
+                  </div>
+
+                  <div className="pointer-events-none absolute -inset-20 blur-3xl opacity-0 transition-opacity duration-700 group-hover/redfly:opacity-40">
+                    <motion.div 
+                      className="absolute left-10 top-0 h-48 w-48 rounded-full bg-violet-500/40"
+                      animate={{
+                        x: [0, 20, 0],
+                        y: [0, -15, 0],
+                        scale: [1, 1.1, 1],
+                      }}
+                      transition={{
+                        duration: 10,
+                        repeat: Infinity,
+                        ease: 'easeInOut',
+                      }}
+                      style={{ willChange: 'transform' }}
+                    />
+                    <motion.div 
+                      className="absolute right-10 top-10 h-48 w-48 rounded-full bg-indigo-500/40"
+                      animate={{
+                        x: [0, -15, 0],
+                        y: [0, 20, 0],
+                        scale: [1, 1.15, 1],
+                      }}
+                      transition={{
+                        duration: 12,
+                        repeat: Infinity,
+                        ease: 'easeInOut',
+                      }}
+                      style={{ willChange: 'transform' }}
+                    />
                   </div>
 
                   <div className="relative">
                     <div className="aspect-[16/9] w-full overflow-hidden border-b border-white/10">
-                      <img
+                      <motion.img
                         src="/rss/RedFly Logo 20232025.png"
                         alt="Bannière RedFly — Logos 2023-2025"
-                        className="h-full w-full object-cover"
+                        className="h-full w-full object-cover transition-transform duration-700 group-hover/redfly:scale-105"
+                        initial={{ scale: 1.1, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        transition={{ duration: 0.6 }}
                       />
                     </div>
-                    <div className="grid gap-3 p-4 sm:p-5">
+                    <div className="grid gap-4 p-5 sm:p-6">
                       <a
                         href="https://www.youtube.com/@RedFlyHD/"
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-block"
+                        className="group/link inline-block transition-transform duration-300 hover:translate-x-1"
                       >
-                        <h3 className="text-2xl font-bold tracking-tight sm:text-3xl hover:underline">RedFly</h3>
+                        <h3 className="text-2xl font-black tracking-tight transition-colors sm:text-3xl group-hover/link:text-white/90">RedFly</h3>
+                        <div className="mt-0.5 h-0.5 w-0 bg-gradient-to-r from-white to-transparent transition-all duration-300 group-hover/link:w-full" />
                       </a>
-                      <p className="text-sm leading-relaxed text-white/80">
+                      <p className="rounded-lg border border-white/10 bg-gradient-to-br from-white/5 to-transparent p-4 text-sm leading-relaxed text-white/80 backdrop-blur-sm transition-all duration-300 hover:border-white/20 hover:from-white/[0.07]">
                         Je suis apparu pour la première fois sur Internet sous le pseudo RedStone64. En 2019, j'ai changé pour RedFly32.
                         En 2022, j'ai créé mon premier vrai logo et j'ai lancé ReNew pour l'annoncer. Nouveaux logos en 2024 (janvier puis
                         juin), et le dernier en février 2025. Je possède 4 logos (R, V, B + violet). En 2025, je fais un reset : le gaming
@@ -342,76 +844,143 @@ export default function Layout() {
                       </p>
                     </div>
                   </div>
-                </div>
+                </motion.div>
+
+                {/* Section Countdown */}
+                <CountdownSection />
 
                 {/* Section liens sociaux intégrée dans le style */}
-                <div className="relative m-4 overflow-hidden rounded-xl border border-white/10 bg-white/[0.03] sm:m-6">
-                  <div className="relative p-4 sm:p-5">
-                    <h3 className="mb-4 text-lg font-bold tracking-tight">Mes liens</h3>
+                <motion.div 
+                  className="relative m-4 overflow-hidden rounded-xl border border-white/10 bg-gradient-to-br from-white/[0.05] to-white/[0.02] shadow-xl shadow-black/20 backdrop-blur-sm sm:m-6"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.25, duration: 0.5 }}
+                >
+                  {/* Texture */}
+                  <div className="pointer-events-none absolute inset-0 opacity-[0.015] mix-blend-overlay">
+                    <div className="h-full w-full" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 400 400\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noiseFilter\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noiseFilter)\'/%3E%3C/svg%3E")', backgroundRepeat: 'repeat' }} />
+                  </div>
+
+                  {/* Gradient animé de fond */}
+                  <div className="pointer-events-none absolute -inset-20 blur-3xl opacity-30">
+                    <motion.div 
+                      className="absolute left-1/4 top-0 h-48 w-48 rounded-full bg-blue-500/30"
+                      animate={{
+                        x: [0, 30, 0],
+                        y: [0, -20, 0],
+                        scale: [1, 1.2, 1],
+                      }}
+                      transition={{
+                        duration: 14,
+                        repeat: Infinity,
+                        ease: 'easeInOut',
+                      }}
+                      style={{ willChange: 'transform' }}
+                    />
+                    <motion.div 
+                      className="absolute right-1/4 bottom-0 h-48 w-48 rounded-full bg-purple-500/30"
+                      animate={{
+                        x: [0, -30, 0],
+                        scale: [1, 1.15, 1],
+                      }}
+                      transition={{
+                        duration: 16,
+                        repeat: Infinity,
+                        ease: 'easeInOut',
+                      }}
+                      style={{ willChange: 'transform' }}
+                    />
+                  </div>
+
+                  <div className="relative p-5 sm:p-6">
+                    <div className="mb-5 flex items-center gap-3">
+                      <motion.div 
+                        className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-white/10 to-white/5 text-xl ring-1 ring-white/10 transition-all hover:scale-110 hover:ring-white/20"
+                        whileHover={{ rotate: 15 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        🔗
+                      </motion.div>
+                      <h3 className="text-xl font-black tracking-tight sm:text-2xl">Mes liens</h3>
+                    </div>
                     
                     {/* YouTube */}
-                    <div className="mb-4 space-y-2">
-                      <h4 className="text-sm font-medium text-white/60">YouTube</h4>
-                      <div className="grid gap-2 sm:grid-cols-2">
-                        <a href="https://www.youtube.com/@RedFlyHD" target="_blank" rel="noreferrer" className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 p-3 text-sm transition hover:bg-white/10">
-                          <FaYoutube className="h-4 w-4 text-red-500" />
-                          <span>RedFlyHD</span>
-                        </a>
-                        <a href="https://www.youtube.com/@redflyplus" target="_blank" rel="noreferrer" className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 p-3 text-sm transition hover:bg-white/10">
-                          <FaYoutube className="h-4 w-4 text-red-500" />
-                          <span>RedFly+</span>
-                        </a>
-                        <a href="https://www.youtube.com/@ReTechHD" target="_blank" rel="noreferrer" className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 p-3 text-sm transition hover:bg-white/10">
-                          <FaYoutube className="h-4 w-4 text-red-500" />
-                          <span>ReTechHD</span>
-                        </a>
-                        <a href="https://www.youtube.com/@RedFlyVOD" target="_blank" rel="noreferrer" className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 p-3 text-sm transition hover:bg-white/10">
-                          <FaYoutube className="h-4 w-4 text-red-500" />
-                          <span>RedFlyVOD</span>
-                        </a>
+                    <div className="mb-5 space-y-3">
+                      <h4 className="text-xs font-bold uppercase tracking-wider text-white/50">YouTube</h4>
+                      <div className="grid gap-2.5 sm:grid-cols-2">
+                        {[
+                          { href: 'https://www.youtube.com/@RedFlyHD', label: 'RedFlyHD' },
+                          { href: 'https://www.youtube.com/@redflyplus', label: 'RedFly+' },
+                          { href: 'https://www.youtube.com/@ReTechHD', label: 'ReTechHD' },
+                          { href: 'https://www.youtube.com/@RedFlyVOD', label: 'RedFlyVOD' },
+                        ].map((link, i) => (
+                          <motion.a
+                            key={link.href}
+                            href={link.href}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="group relative flex items-center gap-3 overflow-hidden rounded-lg border border-white/10 bg-gradient-to-br from-white/[0.08] to-white/[0.03] p-3.5 text-sm font-medium shadow-sm transition-all duration-300 hover:border-red-500/30 hover:from-red-500/10 hover:to-white/[0.05] hover:shadow-lg hover:shadow-red-500/20 hover:-translate-y-0.5"
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.3 + i * 0.05 }}
+                            whileTap={{ scale: 0.97 }}
+                          >
+                            <FaYoutube className="h-5 w-5 text-red-500 transition-all duration-300 group-hover:scale-125 group-hover:rotate-12" />
+                            <span className="relative z-10 transition-colors group-hover:text-white">{link.label}</span>
+                            <svg className="ml-auto h-4 w-4 opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100 -translate-x-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                            </svg>
+                            <div className="absolute inset-0 -z-0 bg-gradient-to-r from-red-500/0 via-red-500/10 to-red-500/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                          </motion.a>
+                        ))}
                       </div>
                     </div>
 
                     {/* Autres réseaux */}
-                    <div className="space-y-2">
-                      <h4 className="text-sm font-medium text-white/60">Réseaux sociaux</h4>
-                      <div className="grid gap-2 sm:grid-cols-2">
-                        <a href="https://x.com/RedFlyHD" target="_blank" rel="noreferrer" className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 p-3 text-sm transition hover:bg-white/10">
-                          <FaXTwitter className="h-4 w-4 text-white" />
-                          <span>X (Twitter)</span>
-                        </a>
-                        <a href="https://discord.gg/tF57H253vP" target="_blank" rel="noreferrer" className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 p-3 text-sm transition hover:bg-white/10">
-                          <FaDiscord className="h-4 w-4 text-indigo-400" />
-                          <span>Discord</span>
-                        </a>
-                        <a href="https://www.tiktok.com/@redflyhd" target="_blank" rel="noreferrer" className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 p-3 text-sm transition hover:bg-white/10">
-                          <FaTiktok className="h-4 w-4 text-pink-400" />
-                          <span>TikTok</span>
-                        </a>
-                        <a href="https://www.twitch.tv/redflyhd" target="_blank" rel="noreferrer" className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 p-3 text-sm transition hover:bg-white/10">
-                          <FaTwitch className="h-4 w-4 text-purple-400" />
-                          <span>Twitch</span>
-                        </a>
-                        <a href="https://github.com/RedFlyHD" target="_blank" rel="noreferrer" className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 p-3 text-sm transition hover:bg-white/10">
-                          <FaGithub className="h-4 w-4 text-gray-300" />
-                          <span>GitHub</span>
-                        </a>
-                        <a href="https://open.spotify.com/user/cnt8f9pv1lzjrhcrj4v3rcpin" target="_blank" rel="noreferrer" className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 p-3 text-sm transition hover:bg-white/10">
-                          <FaSpotify className="h-4 w-4 text-green-400" />
-                          <span>Spotify</span>
-                        </a>
+                    <div className="space-y-3">
+                      <h4 className="text-xs font-bold uppercase tracking-wider text-white/50">Réseaux sociaux</h4>
+                      <div className="grid gap-2.5 sm:grid-cols-2">
+                        {[
+                          { href: 'https://x.com/RedFlyHD', label: 'X (Twitter)', icon: FaXTwitter, color: 'text-white', hoverColor: 'hover:from-white/10' },
+                          { href: 'https://discord.gg/tF57H253vP', label: 'Discord', icon: FaDiscord, color: 'text-indigo-400', hoverColor: 'hover:from-indigo-500/10 hover:border-indigo-500/30 hover:shadow-indigo-500/10' },
+                          { href: 'https://www.tiktok.com/@redflyhd', label: 'TikTok', icon: FaTiktok, color: 'text-pink-400', hoverColor: 'hover:from-pink-500/10 hover:border-pink-500/30 hover:shadow-pink-500/10' },
+                          { href: 'https://www.twitch.tv/redflyhd', label: 'Twitch', icon: FaTwitch, color: 'text-purple-400', hoverColor: 'hover:from-purple-500/10 hover:border-purple-500/30 hover:shadow-purple-500/10' },
+                          { href: 'https://github.com/RedFlyHD', label: 'GitHub', icon: FaGithub, color: 'text-gray-300', hoverColor: 'hover:from-white/10 hover:border-white/20' },
+                          { href: 'https://open.spotify.com/user/cnt8f9pv1lzjrhcrj4v3rcpin', label: 'Spotify', icon: FaSpotify, color: 'text-green-400', hoverColor: 'hover:from-green-500/10 hover:border-green-500/30 hover:shadow-green-500/10' },
+                        ].map((link, i) => (
+                          <motion.a
+                            key={link.href}
+                            href={link.href}
+                            target="_blank"
+                            rel="noreferrer"
+                            className={`group relative flex items-center gap-3 overflow-hidden rounded-lg border border-white/10 bg-gradient-to-br from-white/[0.08] to-white/[0.03] p-3.5 text-sm font-medium shadow-sm transition-all duration-300 ${link.hoverColor} hover:shadow-lg hover:-translate-y-0.5`}
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.5 + i * 0.05 }}
+                            whileTap={{ scale: 0.97 }}
+                          >
+                            <link.icon className={`h-5 w-5 ${link.color} transition-all duration-300 group-hover:scale-125 group-hover:rotate-12`} />
+                            <span className="relative z-10 transition-colors group-hover:text-white">{link.label}</span>
+                            <svg className="ml-auto h-4 w-4 opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100 -translate-x-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                            </svg>
+                          </motion.a>
+                        ))}
                       </div>
                     </div>
                   </div>
-                </div>
+                </motion.div>
               </div>
-              <div className="flex justify-center p-4">
-                <button
+              <div className="flex justify-center border-t border-white/10 bg-gradient-to-t from-zinc-900/95 to-zinc-900/90 p-5 backdrop-blur-xl">
+                <motion.button
                   onClick={() => setAboutOpen(false)}
-                  className="rounded-full bg-white/10 px-5 py-2 text-sm text-white transition hover:bg-white/20"
+                  className="group relative overflow-hidden rounded-full bg-gradient-to-r from-white/10 to-white/5 px-6 py-3 text-sm font-semibold text-white ring-1 ring-white/10 shadow-lg transition-all duration-300 hover:from-white/15 hover:to-white/10 hover:ring-white/20 hover:shadow-xl"
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
                 >
-                  Fermer
-                </button>
+                  <span className="relative z-10 transition-colors group-hover:text-white">Fermer</span>
+                  <div className="absolute inset-0 -z-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                </motion.button>
               </div>
             </motion.div>
           </motion.div>
@@ -454,12 +1023,19 @@ export default function Layout() {
                     initial={{ y: 6, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-                    className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-amber-500/15 text-amber-300 ring-1 ring-amber-400/30"
+                    className="mb-5 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-500/20 to-orange-500/20 text-amber-300 ring-1 ring-amber-400/30 shadow-lg shadow-amber-500/10"
                     aria-hidden
                   >
-                    <HiOutlineExclamationTriangle className="h-6 w-6" />
+                    <HiOutlineExclamationTriangle className="h-7 w-7" />
                   </motion.div>
-                  <h3 className="text-xl font-bold">Télécharger ma brochure (PDF)</h3>
+                  <motion.h3 
+                    className="text-2xl font-black tracking-tight"
+                    initial={{ y: 10, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.15 }}
+                  >
+                    Télécharger ma brochure
+                  </motion.h3>
                   <div className="mt-3 space-y-3 text-sm leading-relaxed text-white/80">
                     <p>
                       Le PDF est relativement lourd. Selon la puissance de votre appareil et votre connexion, l’ouverture ou le téléchargement peut
@@ -469,8 +1045,8 @@ export default function Layout() {
                       Une version allégée, ainsi qu’une version encore plus haute qualité arrivent bientôt.
                     </p>
                   </div>
-                  <div className="mt-5 flex w-full flex-col items-stretch gap-2 sm:flex-row sm:justify-center">
-                    <button
+                  <div className="mt-6 flex w-full flex-col items-stretch gap-3 sm:flex-row sm:justify-center">
+                    <motion.button
                       onClick={() => {
                         setConfirmBrochureOpen(false)
                         if (shouldReopenAbout) {
@@ -478,12 +1054,14 @@ export default function Layout() {
                           setShouldReopenAbout(false)
                         }
                       }}
-                      className="inline-flex items-center justify-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm text-white transition hover:bg-white/20"
+                      className="group inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-white/10 to-white/5 px-5 py-3 text-sm font-semibold text-white ring-1 ring-white/10 shadow-lg transition-all duration-300 hover:from-white/15 hover:to-white/10 hover:ring-white/20 hover:shadow-xl"
+                      whileHover={{ scale: 1.05, y: -2 }}
+                      whileTap={{ scale: 0.95 }}
                     >
-                      <HiOutlineXMark className="h-4 w-4" aria-hidden />
+                      <HiOutlineXMark className="h-4 w-4 transition-all duration-300 group-hover:rotate-90 group-hover:scale-110" aria-hidden />
                       <span>Annuler</span>
-                    </button>
-                    <a
+                    </motion.button>
+                    <motion.a
                       href="/RedFlyHD%20BOOK.pdf"
                       download
                       onClick={() => {
@@ -493,11 +1071,13 @@ export default function Layout() {
                           setShouldReopenAbout(false)
                         }
                       }}
-                      className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-black shadow-sm transition hover:bg-white/90"
+                      className="group inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-white to-white/95 px-5 py-3 text-sm font-bold text-black shadow-lg shadow-white/25 transition-all duration-300 hover:shadow-xl hover:shadow-white/30"
+                      whileHover={{ scale: 1.05, y: -2 }}
+                      whileTap={{ scale: 0.95 }}
                     >
-                      <HiOutlineArrowDownTray className="h-4 w-4" aria-hidden />
-                      <span>Télécharger la brochure</span>
-                    </a>
+                      <HiOutlineArrowDownTray className="h-4 w-4 transition-all duration-300 group-hover:translate-y-1 group-hover:scale-110" aria-hidden />
+                      <span>Télécharger (PDF)</span>
+                    </motion.a>
                   </div>
                 </div>
               </div>
@@ -528,26 +1108,45 @@ export default function Layout() {
 
             {/* Sheet on mobile, card on desktop */}
             <motion.div
-              initial={{ y: 24, scale: 1, opacity: 0.98 }}
+              initial={{ y: 24, scale: 0.96, opacity: 0 }}
               animate={{ y: 0, scale: 1, opacity: 1 }}
-              exit={{ y: 24, scale: 1, opacity: 0 }}
-              transition={{ type: 'spring', stiffness: 260, damping: 24 }}
-              className="relative z-10 w-full max-h-[90dvh] sm:w-[92vw] sm:max-w-3xl overflow-hidden sm:rounded-2xl border border-white/10 bg-neutral-900/90 text-white backdrop-blur-xl sm:shadow-2xl sm:max-h-[85dvh] flex flex-col"
+              exit={{ y: 24, scale: 0.96, opacity: 0 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+              className="relative z-10 w-full max-h-[90dvh] sm:w-[92vw] sm:max-w-3xl overflow-hidden rounded-t-3xl sm:rounded-xl border border-white/10 bg-gradient-to-br from-neutral-900/95 via-neutral-900/90 to-neutral-900/95 text-white backdrop-blur-xl shadow-2xl shadow-black/50 sm:max-h-[85dvh] flex flex-col"
               onClick={(e) => e.stopPropagation()}
             >
+              {/* Texture de grain subtile */}
+              <div className="pointer-events-none absolute inset-0 opacity-[0.015] mix-blend-overlay">
+                <div className="h-full w-full" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 400 400\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noiseFilter\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noiseFilter)\'/%3E%3C/svg%3E")', backgroundRepeat: 'repeat' }} />
+              </div>
+
               {/* Decorative animated glow */}
-              <div className="pointer-events-none absolute -inset-24 -z-10 opacity-40">
+              <div className="pointer-events-none absolute -inset-24 opacity-30">
                 <motion.div
-                  className="absolute left-10 top-10 h-56 w-56 rounded-full bg-violet-500/30 blur-3xl"
-                  animate={{ y: [0, -10, 0], x: [0, 6, 0] }}
-                  transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+                  className="absolute left-10 top-10 h-56 w-56 rounded-full bg-violet-500/40 blur-3xl"
+                  animate={{ 
+                    y: [0, -12, 0], 
+                    x: [0, 8, 0],
+                    scale: [1, 1.1, 1]
+                  }}
+                  transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+                  style={{ willChange: 'transform' }}
                 />
                 <motion.div
-                  className="absolute right-10 bottom-10 h-56 w-56 rounded-full bg-indigo-500/30 blur-3xl"
-                  animate={{ y: [0, 12, 0], x: [0, -8, 0] }}
-                  transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
+                  className="absolute right-10 bottom-10 h-56 w-56 rounded-full bg-indigo-500/40 blur-3xl"
+                  animate={{ 
+                    y: [0, 15, 0], 
+                    x: [0, -10, 0],
+                    scale: [1, 1.15, 1]
+                  }}
+                  transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+                  style={{ willChange: 'transform' }}
                 />
               </div>
+
+              {/* Gradient accents */}
+              <div className="pointer-events-none absolute inset-0 rounded-xl [background:radial-gradient(ellipse_at_top_left,rgba(255,255,255,0.08),transparent_50%)]" />
+              <div className="pointer-events-none absolute inset-0 rounded-xl [background:radial-gradient(ellipse_at_bottom_right,rgba(255,255,255,0.05),transparent_50%)]" />
 
               {/* Header */}
               <div className="sticky top-0 z-20 flex items-center justify-between gap-3 border-b border-white/10 bg-neutral-900/80 px-4 py-3 sm:px-6 sm:py-4 backdrop-blur-xl">

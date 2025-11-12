@@ -326,7 +326,7 @@ function Hero({ revealProgress = 1 }: { revealProgress?: number }) {
                     transition={{ duration: 0.28, ease: 'easeInOut' }}
                     className="overflow-hidden text-[13px] text-white/80 sm:text-sm"
                   >
-                    Salut, moi c'est RedFly ! Depuis quelques années, j'aime de plus en plus travailler sur de gros projets. J'adore donner vie à mes idées, même si elles sont parfois assez abstraites. J'aime sortir des règles contemporaines et innover sur mes visuels.
+                    Hey ! Moi c’est RedFly. Depuis quelques années, je m’améliore dans différents domaines de création comme le divertissement, la communication et le développement. Ce portfolio reflète le fruit de ces années d’apprentissage et de travail.
                   </motion.p>
                 </div>
               </div>
